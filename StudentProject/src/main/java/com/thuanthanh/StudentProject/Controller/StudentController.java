@@ -43,4 +43,12 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("search")
+    public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name){
+        try {
+            return new ResponseEntity<>(studentService.searchbycodeandname(code,name),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

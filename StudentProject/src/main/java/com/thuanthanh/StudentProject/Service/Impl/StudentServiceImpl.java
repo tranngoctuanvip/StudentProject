@@ -55,7 +55,6 @@ public class StudentServiceImpl implements StudentService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Student update(Student student, Integer id,Integer classid) {
         try{
@@ -80,7 +79,6 @@ public class StudentServiceImpl implements StudentService {
         }
         return student;
     }
-
     @Override
     public void delete(List<Integer> id) {
         try {
@@ -89,51 +87,15 @@ public class StudentServiceImpl implements StudentService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Page<Student> search() {
         return null;
     }
-
     @Override
-    public List<Map<String, Object>> top5() {
-        try{
-            List<Map<String,Object>> top5SVpoint = studentRepository.top5point();
-            if(top5SVpoint.isEmpty()){
-                throw new RuntimeException("không có dữ liệu!");
-            }
-            return top5SVpoint;
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-        return null;
-    }
-
-    @Override
-    public List<Map<String, Object>> quantitySV() {
+    public List<Student> searchbycodeandname(String code, String name) {
         try {
-            Map<String,Object> sv = studentRepository.sv();
-            if(sv.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            Map<String,Object> svboy = studentRepository.svboy();
-            if(svboy.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            Map<String,Object> svgrid = studentRepository.svgrid();
-            if(svgrid.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            Map<String,Object> top4under = studentRepository.top4under();
-            if(svgrid.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            List<Map<String,Object>> getall = new ArrayList<>();
-            getall.add(sv);
-            getall.add(svboy);
-            getall.add(svgrid);
-            getall.add(top4under);
-            return getall;
+            List<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name);
+            return searchbycodeandname;
         } catch (RuntimeException e) {
             logger.error(e.getMessage());
         }

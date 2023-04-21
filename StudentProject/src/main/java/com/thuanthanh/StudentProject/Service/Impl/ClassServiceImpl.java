@@ -44,7 +44,6 @@ public class ClassServiceImpl implements ClassService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Class update(Class c, Integer id) {
         try{
@@ -74,7 +73,6 @@ public class ClassServiceImpl implements ClassService {
         }
         return null;
     }
-
     @Override
     public void delete(List<Integer> id) {
         try {
@@ -82,5 +80,14 @@ public class ClassServiceImpl implements ClassService {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+    @Override
+    public List<Class> search(String code) {
+        try {
+            return classRepository.search(code);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
     }
 }

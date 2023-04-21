@@ -5,6 +5,7 @@ import com.thuanthanh.StudentProject.Entity.Subject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import javax.xml.transform.sax.SAXResult;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,5 @@ public interface StudentService {
     Student update(Student student, Integer id, Integer classid);
     void delete(List<Integer> id);
     Page<Student> search();
-    List<Map<String,Object>> top5();
-    List<Map<String,Object>> quantitySV();
+    List<Student> searchbycodeandname(String code, String name);
 }

@@ -43,4 +43,12 @@ public class ClassController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("search")
+    public ResponseEntity<?> search(@Param("code") String code){
+        try{
+            return new ResponseEntity<>(classService.search(code),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -14,10 +14,8 @@ import java.util.Map;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
     Boolean existsByCode(String code);
-
     @Query(value = "select * from student c where c.deleted = 0 and c.status = 1 and c.id = :id",nativeQuery = true)
     Student getall(@Param("id") Integer id);
-
     @Modifying
     @Transactional
     @Query(value = "update student set status = 0 , deleted = 1 where id in (:id)", nativeQuery = true)
@@ -33,4 +31,7 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     Map<String,Object> svgrid();
     @Query(value = "select count(s.id) as 'Số sinh viên có điểm dưới 4' from student s join `point` p on s.id =p.student_id where p.medium_score <=4",nativeQuery = true)
     Map<String,Object> top4under();
+    @Query(value = "select * from student s where s.status = 1 and s.deleted =0 \n" +
+            "\tand (:code is null or s.code like :code) and (:name is null or s.name like :name)",nativeQuery = true)
+    List<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name);
 }

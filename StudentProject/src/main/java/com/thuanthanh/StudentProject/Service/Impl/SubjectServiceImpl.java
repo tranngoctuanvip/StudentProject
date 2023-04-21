@@ -86,4 +86,14 @@ public class SubjectServiceImpl implements SubjectService {
             logger.error(e.getMessage());
         }
     }
+
+    @Override
+    public List<Subject> search(String code, String name) {
+        try {
+            return subjectRepository.search(code,name);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department,Integer> {
@@ -16,6 +17,8 @@ public interface DepartmentRepository extends JpaRepository<Department,Integer> 
     @Transactional
     @Query(value = "update department set status = 0, deleted = 1 where id in (:id)",nativeQuery = true)
     void delete(@Param("id") List<Integer> id);
-
     Boolean existsByCode(String code);
+
+    @Query(value = "select count(d.id) as 'Số lượng phòng học' from department d where d.deleted = 0 and d.status =1", nativeQuery = true)
+    Map<String,Object> quatitydepart();
 }

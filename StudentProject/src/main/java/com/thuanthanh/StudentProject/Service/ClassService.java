@@ -9,4 +9,5 @@ public interface ClassService {
     void add(Class c);
     Class update(Class c, Integer id);
     void delete(List<Integer> id);
+    List<Class> search(String code);
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ClassRepository extends JpaRepository<Class,Integer> {
@@ -19,8 +20,11 @@ public interface ClassRepository extends JpaRepository<Class,Integer> {
     @Query(value = "update class set status = 0, deleted =1 where id in (:id)",nativeQuery = true)
     void delete(@Param("id")List<Integer> id);
     Boolean existsByDepartment(Department department);
-
     Class findByIdAndStatusAndDeleted(Integer id,Integer status,Integer deleted);
-
     List<Class> findByIdIn(List<Integer> classId);
+    @Query(value = "select * from class c where c.status =1 and c.deleted =0 and (:code is null or c.code like :code)",nativeQuery = true)
+    List<Class> search(@Param("code") String code);
+
+    @Query(value = "select count(c.id) as 'Số lượng lớp' from class c where c.status = 1 and c.deleted =0",nativeQuery = true)
+    Map<String,Object> quatityClass();
 }

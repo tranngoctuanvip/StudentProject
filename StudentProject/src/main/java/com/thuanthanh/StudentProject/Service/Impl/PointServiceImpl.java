@@ -38,7 +38,6 @@ public class PointServiceImpl implements PointService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Point update(Point point, Integer id, Integer subId, Integer stId) {
         try {
@@ -57,9 +56,12 @@ public class PointServiceImpl implements PointService {
         }
         return point;
     }
-
     @Override
     public void delete(List<Integer> id) {
-
+        try{
+            pointRepository.delete(id);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 }

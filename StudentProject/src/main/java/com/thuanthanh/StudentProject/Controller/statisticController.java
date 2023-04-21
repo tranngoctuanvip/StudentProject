@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Controller;
 
+import com.thuanthanh.StudentProject.Service.StatisticalService;
 import com.thuanthanh.StudentProject.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("statistic")
 public class statisticController {
     @Autowired
-    private StudentService studentService;
+    private StatisticalService statisticalService;
     @GetMapping("top5sv")
     public ResponseEntity<?> top5(){
         try {
-            return new ResponseEntity<>(studentService.top5(), HttpStatus.OK);
+            return new ResponseEntity<>(statisticalService.top5(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -24,18 +25,17 @@ public class statisticController {
     @GetMapping("statistic")
     public ResponseEntity<?> get(){
         try {
-            return new ResponseEntity<>(studentService.quantitySV(),HttpStatus.OK);
+            return new ResponseEntity<>(statisticalService.quantitySV(),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-//    @GetMapping("top4under")
-//    public ResponseEntity<?> topunder(){
-//        try{
-////            return
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//        return null;
-//    }
+    @GetMapping("quatity")
+    public ResponseEntity<?> getquatity(){
+        try {
+            return new ResponseEntity<>(statisticalService.quatity(),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

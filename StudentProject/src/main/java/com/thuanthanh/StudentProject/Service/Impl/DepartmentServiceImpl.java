@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -39,7 +40,6 @@ public class DepartmentServiceImpl implements DepartmentService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Department update(Department department, Integer id) {
         try{
@@ -61,7 +61,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return null;
     }
-
     @Override
     public void delete(List<Integer> id) {
         try{
@@ -69,5 +68,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> statis() {
+        return null;
     }
 }
