@@ -67,7 +67,6 @@ public class StatisticalServiceImpl implements StatisticalService {
         }
         return null;
     }
-
     @Override
     public List<Map<String, Object>> quatity() {
         try {
@@ -93,6 +92,26 @@ public class StatisticalServiceImpl implements StatisticalService {
             quatity.add(quatityTeacher);
             quatity.add(quatitySub);
             return quatity;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public List<Map<String, Object>> quatityThsTS() {
+        try {
+            Map<String,Object> quatityTh = teacherRepository.quatityThs();
+            if(quatityTh.isEmpty()){
+                throw new Exception("Không có dữ liệu");
+            }
+            Map<String,Object> quatityTS = teacherRepository.quatityTS();
+            if(quatityTS.isEmpty()){
+                throw new Exception("Không có dữ liệu");
+            }
+            List<Map<String,Object>> quatityThTS = new ArrayList<>();
+            quatityThTS.add(quatityTh);
+            quatityThTS.add(quatityTS);
+            return quatityThTS;
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

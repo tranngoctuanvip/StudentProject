@@ -23,4 +23,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     List<Teacher> search(@Param("code") String code, @Param("name") String name, @Param("position") String position);
     @Query(value = "select count(t.id) as 'Số lượng giáo viên' from teacher t where t.status =1 and t.deleted =0",nativeQuery = true)
     Map<String,Object> quatityteacher();
+    @Query(value = "select count(t.id) as 'giảng viên có bằng thạc sĩ' from teacher t where t.`position` = 'thạc sĩ' and t.status =1 and t.deleted =0",nativeQuery = true)
+    Map<String,Object> quatityThs();
+    @Query(value = "select count(t.id) as 'giảng viên có bằng tiến sĩ' from teacher t where t.`position` = 'tiến sĩ' and t.status = 1 and deleted = 0",nativeQuery = true)
+    Map<String,Object> quatityTS();
 }

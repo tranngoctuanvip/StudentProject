@@ -44,7 +44,6 @@ public class SubjectServiceImpl implements SubjectService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public Subject update(Subject subject, Integer id) {
         try {
@@ -77,7 +76,6 @@ public class SubjectServiceImpl implements SubjectService {
         }
         return null;
     }
-
     @Override
     public void delete(List<Integer> id) {
         try {
@@ -86,7 +84,6 @@ public class SubjectServiceImpl implements SubjectService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public List<Subject> search(String code, String name) {
         try {

@@ -1,7 +1,6 @@
 package com.thuanthanh.StudentProject.Controller;
 
 import com.thuanthanh.StudentProject.Service.StatisticalService;
-import com.thuanthanh.StudentProject.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,14 @@ public class statisticController {
     public ResponseEntity<?> getquatity(){
         try {
             return new ResponseEntity<>(statisticalService.quatity(),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("quatityThsTS")
+    public ResponseEntity<?> getquatityThsTS(){
+        try {
+            return new ResponseEntity<>(statisticalService.quatityThsTS(),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

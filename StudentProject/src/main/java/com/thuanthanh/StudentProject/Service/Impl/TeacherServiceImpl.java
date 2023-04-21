@@ -125,7 +125,6 @@ public class TeacherServiceImpl implements TeacherService {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public List<Teacher> search(String code, String name, String position) {
         try {
