@@ -48,21 +48,23 @@ public class StudentController {
         }
     }
     @GetMapping("search")
-    public ResponseEntity<Page<Student>> search(@Param("code") String code, @Param("name") String name,@RequestParam(defaultValue = "0") int size,
+    public ResponseEntity<Page<Student>> search(@Param("code") String code, @Param("name") String name,
+                                                @RequestParam(defaultValue = "0") Integer sex,
+                                                @RequestParam(defaultValue = "0") int size,
                                                 @RequestParam(defaultValue = "5") int limit){
         try {
             Pageable pageable = PageRequest.of(size,limit);
-            return new ResponseEntity<>(studentService.searchbycodeandname(code,name,pageable),HttpStatus.OK);
+            return new ResponseEntity<>(studentService.searchbycodeandname(code,name,sex, pageable),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("searchbysex")
-    public ResponseEntity<?> searchbysex(@Param("sex") Integer sex){
-        try {
-            return new ResponseEntity<>(studentService.searchbysex(sex),HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @GetMapping("searchbysex")
+//    public ResponseEntity<?> searchbysex(@Param("sex") Integer sex){
+//        try {
+//            return new ResponseEntity<>(studentService.searchbysex(sex),HttpStatus.OK);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

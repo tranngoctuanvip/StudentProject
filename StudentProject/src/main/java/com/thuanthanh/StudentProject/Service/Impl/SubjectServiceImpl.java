@@ -97,7 +97,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Page<Subject> search(String code, String name, Pageable pageable) {
         try {
-            return subjectRepository.search(code, name, pageable);
+            Page<Subject> subjectPage = subjectRepository.search(code, name, pageable);
+            if(subjectPage.isEmpty()){
+                throw new Exception("Không có dữ liệu!");
+            }
+            return subjectPage;
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

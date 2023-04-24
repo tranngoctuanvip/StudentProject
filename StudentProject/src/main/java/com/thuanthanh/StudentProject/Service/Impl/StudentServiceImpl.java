@@ -90,9 +90,9 @@ public class StudentServiceImpl implements StudentService {
         return null;
     }
     @Override
-    public Page<Student> searchbycodeandname(String code, String name, Pageable pageable) {
+    public Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable) {
         try {
-            Page<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name,pageable);
+            Page<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name,sex,pageable);
             if(searchbycodeandname.isEmpty()){
                 throw new RuntimeException("Không có dữ liệu!");
             }

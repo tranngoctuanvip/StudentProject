@@ -37,8 +37,8 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     @Query(value = "select count(s.id) as 'Số sinh viên có điểm dưới 4' from student s join `point` p on s.id =p.student_id where p.medium_score <=4",nativeQuery = true)
     Map<String,Object> top4under();
     @Query(value = "select * from student s where s.status = 1 and s.deleted =0 \n" +
-            "\tand (:code is null or s.code like :code) and (:name is null or s.name like :name)",nativeQuery = true)
-    Page<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name, Pageable pageable);
+            "\tand (:code is null or s.code like :code) and (:name is null or s.name like :name) and (:sex is null or s.sex like :sex)",nativeQuery = true)
+    Page<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name,@Param("sex") Integer sex, Pageable pageable);
     @Query(value = "select s.code, s.name, s.birth_day, s.address, s.sex, s.class_id from student s where s.status  =1 and s.deleted = 0 and s.sex = :sex",nativeQuery = true)
     Map<String,Object> searchbysex(@Param("sex") Integer sex);
 }
