@@ -23,4 +23,6 @@ public interface SubjectRepository extends JpaRepository<Subject,Integer> {
     List<Subject> search(@Param("code") String code, @Param("name") String name);
     @Query(value = "select count(s.id) as 'Số lượng môn học' from subject s where s.deleted =0 and s.status =1",nativeQuery = true)
     Map<String,Object> quatitySub();
+    boolean existsByCode(String code);
+    boolean existsByName(String name);
 }

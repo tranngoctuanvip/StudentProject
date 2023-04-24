@@ -23,20 +23,27 @@ public class DepartmentServiceImpl implements DepartmentService {
             Department dp = new Department();
             dp.setCode(department.getCode());
             if(departmentRepository.existsByCode(department.getCode())){
-                throw new RuntimeException("Mã phòng đã tồn tại!");
+                throw new Exception("Mã phòng đã tồn tại!");
             }
             if(department.getCode().isEmpty() || department.getCode() == null){
-                throw new RuntimeException("Mã phòng không được để trống!");
+                throw new Exception("Mã phòng không được để trống!");
+            }
+            dp.setName(department.getName());
+            if(departmentRepository.existsByName(department.getName())){
+                throw new Exception("Tên phòng đã tồn tại!");
+            }
+            if(department.getName().isEmpty() || department.getName() == null){
+                throw new Exception("Tên phòng không được để trống!");
             }
             dp.setDescribe(department.getDescribe());
             if(department.getDescribe().isEmpty() || department.getDescribe() == null){
-                throw new RuntimeException("Mô tả không được để trống!");
+                throw new Exception("Mô tả không được để trống!");
             }
             dp.setStatus(1);
             dp.setDeleted(0);
             dp.setCreatTime(new Date());
             departmentRepository.save(dp);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
@@ -45,18 +52,28 @@ public class DepartmentServiceImpl implements DepartmentService {
         try{
             Department dp = departmentRepository.findById(id).get();
             dp.setCode(department.getCode());
+            if(departmentRepository.existsByCode(department.getCode())){
+                throw new Exception("Mã phòng đã tồn tại!");
+            }
             if(department.getCode().isEmpty() || department.getCode() == null){
-                throw new RuntimeException("Mã phòng không được để trống!");
+                throw new Exception("Mã phòng không được để trống!");
+            }
+            dp.setName(department.getName());
+            if(departmentRepository.existsByName(department.getName())){
+                throw new Exception("Tên phòng đã tồn tại!");
+            }
+            if(department.getName().isEmpty() || department.getName() == null){
+                throw new Exception("Tên phòng không được để trống!");
             }
             dp.setDescribe(department.getDescribe());
             if(department.getDescribe().isEmpty() || department.getDescribe() == null){
-                throw new RuntimeException("Mô tả không được để trống!");
+                throw new Exception("Mô tả không được để trống!");
             }
             dp.setStatus(1);
             dp.setDeleted(0);
             dp.setUpdateTime(new Date());
             departmentRepository.save(dp);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return null;

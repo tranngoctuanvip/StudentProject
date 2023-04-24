@@ -1,5 +1,7 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+
+import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Entity.Subject;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -97,6 +96,19 @@ public class StudentServiceImpl implements StudentService {
             List<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name);
             return searchbycodeandname;
         } catch (RuntimeException e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+    @Override
+    public Optional<Student> searchbysex(Integer sex) {
+        try {
+            Optional<Student> students = studentRepository.searchbysex(sex);
+           if(students.isEmpty()){
+               throw new Exception("Không có dữ liệu!");
+           }
+           return students;
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return null;

@@ -6,6 +6,8 @@ import com.thuanthanh.StudentProject.Service.ClassService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -26,6 +28,13 @@ public class ClassServiceImpl implements ClassService {
             }
             if(c.getCode().isEmpty() || c.getCode() == null){
                 throw new RuntimeException("Tên mã lớp không được để trống!");
+            }
+            ca.setName(c.getName());
+            if(classRepository.existsByName(c.getName())){
+                throw new RuntimeException("Tên lớp đã tồn tại!");
+            }
+            if(c.getName().isEmpty() || c.getName() == null){
+                throw new RuntimeException("Tên lớp không được để trống!");
             }
             ca.setQuantity(c.getQuantity());
             if(c.getQuantity().isEmpty() || c.getQuantity() == null){
@@ -55,6 +64,13 @@ public class ClassServiceImpl implements ClassService {
             if(c.getCode().isEmpty() || c.getCode() == null){
                 throw new RuntimeException("Tên mã lớp không được để trống!");
             }
+            ca.setName(c.getName());
+            if(classRepository.existsByName(c.getName())){
+                throw new RuntimeException("Tên lớp đã tồn tại!");
+            }
+            if(c.getName().isEmpty() || c.getName() == null){
+                throw new RuntimeException("Tên lớp không được để trống!");
+            }
             ca.setQuantity(c.getQuantity());
             if(c.getQuantity().isEmpty() || c.getQuantity() == null){
                 throw new RuntimeException("Số lượng không được để trống!");
@@ -82,9 +98,9 @@ public class ClassServiceImpl implements ClassService {
         }
     }
     @Override
-    public List<Class> search(String code) {
+    public Page<Class> search(String code, Pageable pageable) {
         try {
-            return classRepository.search(code);
+            return classRepository.search(code, pageable);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

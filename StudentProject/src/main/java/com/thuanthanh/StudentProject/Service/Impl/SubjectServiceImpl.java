@@ -20,20 +20,26 @@ public class SubjectServiceImpl implements SubjectService {
         try{
             Subject sub = new Subject();
             sub.setCode(subject.getCode());
+            if(subjectRepository.existsByCode(sub.getCode())){
+                throw new RuntimeException("Mã môn học đã tồn tại!");
+            }
             if(subject.getCode().isEmpty() || subject.getCode() == null){
                 throw new RuntimeException("Mã môn học không được để trống!");
             }
             sub.setName(subject.getName());
+            if(subjectRepository.existsByName(subject.getName())){
+                throw new RuntimeException("Tên môn học đã tồn tại!");
+            }
             if(subject.getName().isEmpty() || subject.getName() == null){
                 throw new RuntimeException("Tên môn học không được để trống!");
             }
             sub.setNote(subject.getNote());
             sub.setOnly(subject.getOnly());
-            if(subject.getOnly().equals("") || subject.getOnly() == null){
+            if(subject.getOnly() == null){
                 throw  new RuntimeException("Số tín chỉ không được để trống!");
             }
             sub.setQuantity(subject.getQuantity());
-            if(subject.getQuantity().equals("") || subject.getQuantity() == null){
+            if(subject.getQuantity() == null){
                 throw new RuntimeException("Số tiết không được để trống!");
             }
             sub.setStatus(1);
@@ -47,16 +53,18 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject update(Subject subject, Integer id) {
         try {
-            Boolean s = subjectRepository.existsById(id);
             Subject sub = subjectRepository.findById(id).get();
-            if(sub.equals("") || !s){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
             sub.setCode(subject.getCode());
+            if(subjectRepository.existsByCode(sub.getCode())){
+                throw new RuntimeException("Mã môn học đã tồn tại!");
+            }
             if(subject.getCode().isEmpty() || subject.getCode() == null){
                 throw new RuntimeException("Mã môn học không được để trống!");
             }
             sub.setName(subject.getName());
+            if(subjectRepository.existsByName(subject.getName())){
+                throw new RuntimeException("Tên môn học đã tồn tại!");
+            }
             if(subject.getName().isEmpty() || subject.getName() == null){
                 throw new RuntimeException("Tên môn học không được để trống!");
             }

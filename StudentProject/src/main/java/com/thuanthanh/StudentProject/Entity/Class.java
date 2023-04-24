@@ -17,6 +17,8 @@ public class Class {
     private Integer id;
     @Column(name = "code", length = 150)
     private String code;
+    @Column(name = "name", length = 150)
+    private String name;
     @Column(name = "note", length = 500)
     private String note;
     @Column(name = "quantity", length = 50)

@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Controller;
 
+
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("student")
@@ -49,6 +52,14 @@ public class StudentController {
             return new ResponseEntity<>(studentService.searchbycodeandname(code,name),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("searchbysex")
+    public ResponseEntity<?> searchbysex(@Param("sex") Integer sex){
+        try {
+            return new ResponseEntity<>(studentService.searchbysex(sex),HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

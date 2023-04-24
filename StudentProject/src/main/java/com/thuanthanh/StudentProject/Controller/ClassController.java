@@ -3,6 +3,8 @@ package com.thuanthanh.StudentProject.Controller;
 import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Service.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +46,11 @@ public class ClassController {
         }
     }
     @GetMapping("search")
-    public ResponseEntity<?> search(@Param("code") String code){
+    public ResponseEntity<?> search(@Param("code") String code, Pageable pageable){
         try{
-            return new ResponseEntity<>(classService.search(code),HttpStatus.OK);
+            Page<Class> page = classService.search(code,pageable);
+            PageWrapper<Class> classPage = new PageWrapper<>(page);
+            return new ResponseEntity<>(classPage,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

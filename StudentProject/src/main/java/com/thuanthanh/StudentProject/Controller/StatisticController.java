@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("statistic")
-public class statisticController {
+public class StatisticController {
     @Autowired
     private StatisticalService statisticalService;
     @GetMapping("top5sv")

@@ -17,6 +17,8 @@ public class Department {
     private Integer id;
     @Column(name = "code", length = 150)
     private String code;
+    @Column(name = "name", length = 150)
+    private String name;
     @Column(name = "describe", length = 500)
     private String describe;
     @Column(name = "status")

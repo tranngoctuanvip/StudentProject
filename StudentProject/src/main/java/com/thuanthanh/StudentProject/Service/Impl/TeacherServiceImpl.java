@@ -76,7 +76,7 @@ public class TeacherServiceImpl implements TeacherService {
             Teacher t = teacherRepository.findById(id).get();
             t.setCode(teacher.getCode());
             if(teacherRepository.existsByCode(teacher.getCode())){
-                throw new Exception("Mã giảng viên đã ồn tại!");
+                throw new Exception("Mã giảng viên đã tồn tại!");
             }
             if(teacher.getCode().isEmpty() || teacher.getCode() == null){
                 throw new RuntimeException("Không được để trống mã giảng viên!");
