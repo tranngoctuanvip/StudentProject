@@ -1,9 +1,7 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
 
-import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
-import com.thuanthanh.StudentProject.Entity.Subject;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
 import com.thuanthanh.StudentProject.Repository.StudentRepository;
 import com.thuanthanh.StudentProject.Service.StudentService;
@@ -12,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -91,9 +90,12 @@ public class StudentServiceImpl implements StudentService {
         return null;
     }
     @Override
-    public List<Student> searchbycodeandname(String code, String name) {
+    public Page<Student> searchbycodeandname(String code, String name, Pageable pageable) {
         try {
-            List<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name);
+            Page<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name,pageable);
+            if(searchbycodeandname.isEmpty()){
+                throw new RuntimeException("Không có dữ liệu!");
+            }
             return searchbycodeandname;
         } catch (RuntimeException e) {
             logger.error(e.getMessage());
@@ -101,9 +103,9 @@ public class StudentServiceImpl implements StudentService {
         return null;
     }
     @Override
-    public Optional<Student> searchbysex(Integer sex) {
+    public Map<String,Object> searchbysex(Integer sex) {
         try {
-            Optional<Student> students = studentRepository.searchbysex(sex);
+            Map<String,Object> students = studentRepository.searchbysex(sex);
            if(students.isEmpty()){
                throw new Exception("Không có dữ liệu!");
            }

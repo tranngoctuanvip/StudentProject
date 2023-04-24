@@ -6,6 +6,9 @@ import com.thuanthanh.StudentProject.Service.SubjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +52,13 @@ public class SubjectController {
         }
     }
     @GetMapping("search")
-    public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name){
+    public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name,
+                                    @RequestParam(defaultValue = "0") int size,
+                                    @RequestParam(defaultValue = "5") int limit){
         try {
-            return new ResponseEntity<>(subjectService.search(code,name),HttpStatus.OK);
+            Pageable pageable = PageRequest.of(size,limit);
+            Page<Subject> page = subjectService.search(code,name, pageable);
+            return new ResponseEntity<>(page,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

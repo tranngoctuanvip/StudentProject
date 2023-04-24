@@ -3,6 +3,8 @@ package com.thuanthanh.StudentProject.Entity.DTO;
 import com.thuanthanh.StudentProject.Entity.Class;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class StudentDto {
     private String code;
@@ -10,5 +12,5 @@ public class StudentDto {
     private String birthDay;
     private Integer sex;
     private String address;
-    private Class aClass;
+    private List<Class> aClass;
 }

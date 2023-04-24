@@ -3,6 +3,8 @@ package com.thuanthanh.StudentProject.Repository;
 
 import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -36,7 +38,7 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     Map<String,Object> top4under();
     @Query(value = "select * from student s where s.status = 1 and s.deleted =0 \n" +
             "\tand (:code is null or s.code like :code) and (:name is null or s.name like :name)",nativeQuery = true)
-    List<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name);
+    Page<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name, Pageable pageable);
     @Query(value = "select s.code, s.name, s.birth_day, s.address, s.sex, s.class_id from student s where s.status  =1 and s.deleted = 0 and s.sex = :sex",nativeQuery = true)
-    Optional<Student> searchbysex(@Param("sex") Integer sex);
+    Map<String,Object> searchbysex(@Param("sex") Integer sex);
 }

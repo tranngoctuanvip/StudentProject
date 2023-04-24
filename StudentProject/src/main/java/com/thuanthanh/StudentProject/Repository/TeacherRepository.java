@@ -1,6 +1,8 @@
 package com.thuanthanh.StudentProject.Repository;
 
 import com.thuanthanh.StudentProject.Entity.Teacher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +22,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     Boolean existsByCode(String code);
     @Query(value = "select * from teacher t where t.status = 1 and t.deleted = 0 and (:code is null or t.code like :code) \n" +
             "\tand (:name is null or t.name like :name) and (:position is null or t.`position` like :position)", nativeQuery = true)
-    List<Teacher> search(@Param("code") String code, @Param("name") String name, @Param("position") String position);
+    Page<Teacher> search(@Param("code") String code, @Param("name") String name, @Param("position") String position, Pageable pageable);
     @Query(value = "select count(t.id) as 'Số lượng giáo viên' from teacher t where t.status =1 and t.deleted =0",nativeQuery = true)
     Map<String,Object> quatityteacher();
     @Query(value = "select count(t.id) as 'giảng viên có bằng thạc sĩ' from teacher t where t.`position` = 'thạc sĩ' and t.status =1 and t.deleted =0",nativeQuery = true)

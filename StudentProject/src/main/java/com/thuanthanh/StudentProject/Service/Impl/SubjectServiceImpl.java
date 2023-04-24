@@ -6,6 +6,8 @@ import com.thuanthanh.StudentProject.Service.SubjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -93,9 +95,9 @@ public class SubjectServiceImpl implements SubjectService {
         }
     }
     @Override
-    public List<Subject> search(String code, String name) {
+    public Page<Subject> search(String code, String name, Pageable pageable) {
         try {
-            return subjectRepository.search(code,name);
+            return subjectRepository.search(code, name, pageable);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
