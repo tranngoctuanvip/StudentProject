@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Date;
 import java.util.List;
@@ -19,80 +21,57 @@ public class ClassServiceImpl implements ClassService {
     @Autowired
     private ClassRepository classRepository;
     @Override
+    @Transactional
     public void add(Class c) {
         try{
-            Class ca = new Class();
-            ca.setCode(c.getCode());
-            if(classRepository.existsByCode(c.getCode())){
-                throw new RuntimeException("Mã lớp đã tồn tại!");
+            if(validate(c)){
+                Class ca = new Class();
+                ca.setCode(c.getCode());
+                ca.setName(c.getName());
+                ca.setQuantity(c.getQuantity());
+                ca.setNote(c.getNote());
+                ca.setStatus(1);
+                ca.setDeleted(0);
+                ca.setCreatTime(new Date());
+                ca.setDepartment(c.getDepartment());
+                classRepository.save(ca);
             }
-            if(c.getCode().isEmpty() || c.getCode() == null){
-                throw new RuntimeException("Tên mã lớp không được để trống!");
-            }
-            ca.setName(c.getName());
-            if(classRepository.existsByName(c.getName())){
-                throw new RuntimeException("Tên lớp đã tồn tại!");
-            }
-            if(c.getName().isEmpty() || c.getName() == null){
-                throw new RuntimeException("Tên lớp không được để trống!");
-            }
-            ca.setQuantity(c.getQuantity());
-            if(c.getQuantity().isEmpty() || c.getQuantity() == null){
-                throw new RuntimeException("Số lượng không được để trống!");
-            }
-            ca.setNote(c.getNote());
-            ca.setStatus(1);
-            ca.setDeleted(0);
-            ca.setCreatTime(new Date());
-            ca.setDepartment(c.getDepartment());
-            if(classRepository.existsByDepartment(c.getDepartment())){
-                throw new RuntimeException("Phòng đã có lớp học!");
-            }
-            classRepository.save(ca);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
     @Override
+    @Transactional
     public Class update(Class c, Integer id) {
         try{
-            Class ca = classRepository.findById(id).get();
-            ca.setCode(c.getCode());
-            if(classRepository.existsByCode(c.getCode())){
-                throw new RuntimeException("Mã lớp đã tồn tại!");
+            if(validate(c)){
+                Class ca = classRepository.findById(id).get();
+                ca.setCode(c.getCode());
+                ca.setName(c.getName());
+                ca.setQuantity(c.getQuantity());
+                ca.setNote(c.getNote());
+                ca.setStatus(1);
+                ca.setDeleted(0);
+                ca.setUpdateTime(new Date());
+                ca.setDepartment(c.getDepartment());
+                classRepository.save(ca);
             }
-            if(c.getCode().isEmpty() || c.getCode() == null){
-                throw new RuntimeException("Tên mã lớp không được để trống!");
-            }
-            ca.setName(c.getName());
-            if(classRepository.existsByName(c.getName())){
-                throw new RuntimeException("Tên lớp đã tồn tại!");
-            }
-            if(c.getName().isEmpty() || c.getName() == null){
-                throw new RuntimeException("Tên lớp không được để trống!");
-            }
-            ca.setQuantity(c.getQuantity());
-            if(c.getQuantity().isEmpty() || c.getQuantity() == null){
-                throw new RuntimeException("Số lượng không được để trống!");
-            }
-            ca.setNote(c.getNote());
-            ca.setStatus(1);
-            ca.setDeleted(0);
-            ca.setUpdateTime(new Date());
-            ca.setDepartment(c.getDepartment());
-            if(classRepository.existsByDepartment(c.getDepartment())){
-                throw new RuntimeException("Phòng đã có lớp!");
-            }
-            classRepository.save(ca);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return null;
     }
     @Override
+    @Transactional
     public void delete(List<Integer> id) {
         try {
-            classRepository.delete(id);
+            Boolean kt = classRepository.existsByIdIn(id);
+            if(kt){
+                classRepository.delete(id);
+            }
+            else {
+                throw new Exception("Id Không tồn tại!");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -105,5 +84,36 @@ public class ClassServiceImpl implements ClassService {
             logger.error(e.getMessage());
         }
         return null;
+    }
+    public boolean validate(Class c){
+        try{
+            if(c == null){
+                throw new Exception("Không có dữ liệu!");
+            }
+            if(c.getId() == null){
+                throw new Exception("Không tồn tại Id!");
+            }
+            if(classRepository.existsByCode(c.getCode())){
+                throw new Exception("Mã lớp đã tồn tại!");
+            }
+            if(c.getCode().isEmpty() || c.getCode() == null){
+                throw new Exception("Tên mã lớp không được để trống!");
+            }
+            if(classRepository.existsByName(c.getName())){
+                throw new Exception("Tên lớp đã tồn tại!");
+            }
+            if(c.getName().isEmpty() || c.getName() == null){
+                throw new Exception("Tên lớp không được để trống!");
+            }
+            if(c.getQuantity().isEmpty() || c.getQuantity() == null){
+                throw new Exception("Số lượng không được để trống!");
+            }
+            if(classRepository.existsByDepartment(c.getDepartment())){
+                throw new Exception("Phòng đã có lớp!");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return false;
     }
 }

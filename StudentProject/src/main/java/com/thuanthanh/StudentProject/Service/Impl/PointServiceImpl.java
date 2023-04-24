@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -22,6 +23,7 @@ public class PointServiceImpl implements PointService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Override
+    @Transactional
     public void add(Point point, Integer subId, Integer stId) {
         try {
             Point p = new Point();
@@ -39,27 +41,39 @@ public class PointServiceImpl implements PointService {
         }
     }
     @Override
+    @Transactional
     public Point update(Point point, Integer id, Integer subId, Integer stId) {
         try {
-            Point p = pointRepository.findById(id).get();
-            p.setStudent(studentRepository.getall(stId));
-            p.setSubject(subjectRepository.getall(subId));
-            p.setPointComponent(point.getPointComponent());
-            p.setTestScore(point.getTestScore());
-            p.setMediumScore((point.getPointComponent()*3 + point.getTestScore()*7)/10);
-            p.setDeleted(0);
-            p.setStatus(1);
-            p.setUpdateTime(new Date());
-            pointRepository.save(p);
-        } catch (RuntimeException e) {
+            if(pointRepository.existsById(id)){
+                Point p = pointRepository.findById(id).get();
+                p.setStudent(studentRepository.getall(stId));
+                p.setSubject(subjectRepository.getall(subId));
+                p.setPointComponent(point.getPointComponent());
+                p.setTestScore(point.getTestScore());
+                p.setMediumScore((point.getPointComponent()*3 + point.getTestScore()*7)/10);
+                p.setDeleted(0);
+                p.setStatus(1);p.setUpdateTime(new Date());
+                pointRepository.save(p);
+            }
+            else {
+                throw new Exception("Không tồn tại Id!");
+            }
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return point;
     }
     @Override
+    @Transactional
     public void delete(List<Integer> id) {
         try{
-            pointRepository.delete(id);
+            Boolean kt = pointRepository.existsByIdIn(id);
+            if(kt){
+                pointRepository.delete(id);
+            }
+            else {
+                throw new Exception("Không tồn tại Id!");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

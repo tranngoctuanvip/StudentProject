@@ -19,60 +19,34 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
     @Override
     public void add(Department department) {
-        try{
-            Department dp = new Department();
-            dp.setCode(department.getCode());
-            if(departmentRepository.existsByCode(department.getCode())){
-                throw new Exception("Mã phòng đã tồn tại!");
+        try {
+            if(validate((department))){
+                Department dp = new Department();
+                dp.setCode(department.getCode());
+                dp.setName(department.getName());
+                dp.setDescribe(department.getDescribe());
+                dp.setStatus(1);
+                dp.setDeleted(0);
+                dp.setCreatTime(new Date());
+                departmentRepository.save(dp);
             }
-            if(department.getCode().isEmpty() || department.getCode() == null){
-                throw new Exception("Mã phòng không được để trống!");
-            }
-            dp.setName(department.getName());
-            if(departmentRepository.existsByName(department.getName())){
-                throw new Exception("Tên phòng đã tồn tại!");
-            }
-            if(department.getName().isEmpty() || department.getName() == null){
-                throw new Exception("Tên phòng không được để trống!");
-            }
-            dp.setDescribe(department.getDescribe());
-            if(department.getDescribe().isEmpty() || department.getDescribe() == null){
-                throw new Exception("Mô tả không được để trống!");
-            }
-            dp.setStatus(1);
-            dp.setDeleted(0);
-            dp.setCreatTime(new Date());
-            departmentRepository.save(dp);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
     @Override
     public Department update(Department department, Integer id) {
-        try{
-            Department dp = departmentRepository.findById(id).get();
-            dp.setCode(department.getCode());
-            if(departmentRepository.existsByCode(department.getCode())){
-                throw new Exception("Mã phòng đã tồn tại!");
+        try {
+            if(validate(department)){
+                Department dp = departmentRepository.findById(id).get();
+                dp.setCode(department.getCode());
+                dp.setName(department.getName());
+                dp.setDescribe(department.getDescribe());
+                dp.setStatus(1);
+                dp.setDeleted(0);
+                dp.setUpdateTime(new Date());
+                departmentRepository.save(dp);
             }
-            if(department.getCode().isEmpty() || department.getCode() == null){
-                throw new Exception("Mã phòng không được để trống!");
-            }
-            dp.setName(department.getName());
-            if(departmentRepository.existsByName(department.getName())){
-                throw new Exception("Tên phòng đã tồn tại!");
-            }
-            if(department.getName().isEmpty() || department.getName() == null){
-                throw new Exception("Tên phòng không được để trống!");
-            }
-            dp.setDescribe(department.getDescribe());
-            if(department.getDescribe().isEmpty() || department.getDescribe() == null){
-                throw new Exception("Mô tả không được để trống!");
-            }
-            dp.setStatus(1);
-            dp.setDeleted(0);
-            dp.setUpdateTime(new Date());
-            departmentRepository.save(dp);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -80,15 +54,48 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
     @Override
     public void delete(List<Integer> id) {
-        try{
-            departmentRepository.delete(id);
+        try {
+            Boolean kt = departmentRepository.existsByIdIn(id);
+            if(kt){
+                departmentRepository.delete(id);
+            }
+            else {
+                throw new Exception("Không tồn tại Id!");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
     }
-
     @Override
     public List<Map<String, Object>> statis() {
         return null;
+    }
+    private boolean validate(Department department) {
+        try {
+            if (department == null) {
+                throw new Exception("Không có dữ liệu!");
+            }
+            if(department.getId() == null){
+                throw new Exception("Không tồn tại Id!");
+            }
+            if (departmentRepository.existsByName(department.getName())) {
+                throw new Exception("Tên phòng đã tồn tại!");
+            }
+            if(department.getName() == null){
+                throw new Exception("Tên phòng không được để trống!");
+            }
+            if(departmentRepository.existsByCode(department.getCode())){
+                throw new Exception("Mã phòng đã tồn tại!");
+            }
+            if(department.getCode() == null){
+                throw new Exception("Mã phòng không được để trống!");
+            }
+            if(department.getDescribe() == null){
+                throw new Exception("Mô tả không được để trống!");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return false;
     }
 }

@@ -19,6 +19,7 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
     Boolean existsByCode(String code);
+    Boolean existsByIdIn(List<Integer> id);
     @Query(value = "select * from student c where c.deleted = 0 and c.status = 1 and c.id = :id",nativeQuery = true)
     Student getall(@Param("id") Integer id);
     @Modifying

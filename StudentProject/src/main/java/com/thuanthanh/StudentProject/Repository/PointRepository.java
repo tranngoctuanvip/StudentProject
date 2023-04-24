@@ -16,4 +16,6 @@ public interface PointRepository extends JpaRepository<Point,Integer> {
     @Transactional
     @Query(value = "update `point` set status = 1 , deleted = 0 where id  in (:id)",nativeQuery = true)
     void delete(@Param("id")List<Integer> id);
+
+    Boolean existsByIdIn(List<Integer> id);
 }

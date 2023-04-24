@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class StatisticalServiceImpl implements StatisticalService {
     @Autowired
     private ClassRepository classRepository;
     @Override
+    @Transactional
     public List<Map<String, Object>> quantitySV() {
         try {
             Map<String,Object> sv = studentRepository.sv();
@@ -55,6 +57,7 @@ public class StatisticalServiceImpl implements StatisticalService {
         return null;
     }
     @Override
+    @Transactional
     public List<Map<String, Object>> top5() {
         try{
             List<Map<String,Object>> top5SVpoint = studentRepository.top5point();
@@ -68,6 +71,7 @@ public class StatisticalServiceImpl implements StatisticalService {
         return null;
     }
     @Override
+    @Transactional
     public List<Map<String, Object>> quatity() {
         try {
             Map<String,Object> quatityClass = classRepository.quatityClass();
@@ -98,6 +102,7 @@ public class StatisticalServiceImpl implements StatisticalService {
         return null;
     }
     @Override
+    @Transactional
     public List<Map<String, Object>> quatityThsTS() {
         try {
             Map<String,Object> quatityTh = teacherRepository.quatityThs();

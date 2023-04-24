@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -38,7 +40,7 @@ public class ClassController {
         }
     }
     @PostMapping("delete")
-    public ResponseEntity<?> delete(@RequestParam List<Integer> id){
+    public ResponseEntity<?> delete(@Valid @RequestParam List<Integer> id){
         try{
             classService.delete(id);
             return ResponseEntity.ok("Delete class success!");

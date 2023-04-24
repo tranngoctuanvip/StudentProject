@@ -21,7 +21,7 @@ public interface ClassRepository extends JpaRepository<Class,Integer> {
     @Modifying
     @Transactional
     @Query(value = "update class set status = 0, deleted =1 where id in (:id)",nativeQuery = true)
-    void delete(@Param("id")List<Integer> id);
+    void delete(@Param("id") List<Integer> id);
     Boolean existsByDepartment(Department department);
     Class findByIdAndStatusAndDeleted(Integer id,Integer status,Integer deleted);
     List<Class> findByIdIn(List<Integer> classId);
@@ -30,4 +30,5 @@ public interface ClassRepository extends JpaRepository<Class,Integer> {
 
     @Query(value = "select count(c.id) as 'Số lượng lớp' from class c where c.status = 1 and c.deleted =0",nativeQuery = true)
     Map<String,Object> quatityClass();
+    Boolean existsByIdIn(List<Integer> id);
 }

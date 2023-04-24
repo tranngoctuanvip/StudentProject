@@ -12,7 +12,5 @@ public interface StudentService {
     void add(Student student, Integer classid);
     Student update(Student student, Integer id, Integer classid);
     void delete(List<Integer> id);
-    Page<Student> search();
-    Page<Student> searchbycodeandname(String code, String name,Integer sex, Pageable pageable);
-    Map<String,Object> searchbysex(Integer sex);
+    Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable);
 }

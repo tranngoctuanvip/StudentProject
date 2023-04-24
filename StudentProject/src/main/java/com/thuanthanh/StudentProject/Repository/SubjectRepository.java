@@ -27,4 +27,5 @@ public interface SubjectRepository extends JpaRepository<Subject,Integer> {
     Map<String,Object> quatitySub();
     boolean existsByCode(String code);
     boolean existsByName(String name);
+    Boolean existsByIdIn(List<Integer> id);
 }

@@ -20,6 +20,7 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     @Query(value = "update teacher set status = 0 ,deleted =1 where id in (:id)",nativeQuery = true)
     void delete(@Param("id")List<Integer> id);
     Boolean existsByCode(String code);
+    Boolean existsByIdIn(List<Integer> id);
     @Query(value = "select * from teacher t where t.status = 1 and t.deleted = 0 and (:code is null or t.code like :code) \n" +
             "\tand (:name is null or t.name like :name) and (:position is null or t.`position` like :position)", nativeQuery = true)
     Page<Teacher> search(@Param("code") String code, @Param("name") String name, @Param("position") String position, Pageable pageable);
