@@ -22,7 +22,7 @@ public class DepartmentController {
             departmentService.add(department);
             return ResponseEntity.ok("Add department success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")
@@ -31,7 +31,7 @@ public class DepartmentController {
             departmentService.update(department,id);
             return ResponseEntity.ok("Update department success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("delete")
@@ -40,7 +40,7 @@ public class DepartmentController {
             departmentService.delete(id);
             return ResponseEntity.ok("Delete department success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -25,10 +25,9 @@ public class StudentServiceImpl implements StudentService {
     private ClassRepository classRepository;
     Utils utils = new Utils();
     @Override
-    @Transactional
     public void add(Student student, Integer classid) {
         try{
-            if(validate(student)){
+            if(!validate(student)){
                 Student sd = new Student();
                 sd.setCode(student.getCode());
                 sd.setName(student.getName());
@@ -42,15 +41,15 @@ public class StudentServiceImpl implements StudentService {
                 studentRepository.save(sd);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
-    @Transactional
     public Student update(Student student, Integer id,Integer classid) {
         try{
-            if(validate(student)){
+            if(!validate(student)){
                 Student sd = studentRepository.findById(id).get();
+                sd.setCode(student.getCode());
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
@@ -62,12 +61,11 @@ public class StudentServiceImpl implements StudentService {
                 studentRepository.save(sd);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return student;
+        return null;
     }
     @Override
-    @Transactional
     public void delete(List<Integer> id) {
         try {
             Boolean kt = studentRepository.existsByIdIn(id);
@@ -78,11 +76,10 @@ public class StudentServiceImpl implements StudentService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
-    @Transactional
     public Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable) {
         try {
             Page<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name,sex,pageable);
@@ -91,32 +88,24 @@ public class StudentServiceImpl implements StudentService {
             }
             return searchbycodeandname;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+           throw new RuntimeException(e);
         }
-        return null;
     }
-    public boolean validate(Student student){
-        try {
-            if(student == null){
-                throw new Exception("Không có dữ liệu!");
-            }
-            if(student.getId() == null){
-                throw new Exception("Không tồn tại Id!");
-            }
-            if(studentRepository.existsByCode(student.getCode())){
-                throw new Exception("Mã sinh viên đã tồn tại!");
-            }
-            if(student.getCode().isEmpty() || student.getCode() == null){
-                throw new Exception("Mã sinh viên không được bỏ trống!");
-            }
-            if(student.getName().isEmpty() || student.getName() == null){
-                throw new Exception("Tên sinh viên không được để trống!");
-            }
-            if(student.getAddress().isEmpty() || student.getAddress() == null){
-                throw new Exception("Địa chỉ không được để trống!");
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+    public boolean validate(Student student) throws Exception {
+        if(student == null){
+            throw new Exception("Không có dữ liệu!");
+        }
+        if(studentRepository.existsByCode(student.getCode())){
+            throw new Exception("Mã sinh viên đã tồn tại!");
+        }
+        if(student.getCode().isEmpty() || student.getCode() == null){
+            throw new Exception("Mã sinh viên không được bỏ trống!");
+        }
+        if(student.getName().isEmpty() || student.getName() == null){
+            throw new Exception("Tên sinh viên không được để trống!");
+        }
+        if(student.getAddress().isEmpty() || student.getAddress() == null){
+            throw new Exception("Địa chỉ không được để trống!");
         }
         return false;
     }

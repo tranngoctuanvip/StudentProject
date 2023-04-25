@@ -2,6 +2,7 @@ package com.thuanthanh.StudentProject.Controller;
 
 import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Service.ClassService;
+import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageDescriptorFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,16 +26,16 @@ public class ClassController {
             classService.add(c);
             return ResponseEntity.ok("Add class success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody Class c, @Param("id") Integer id){
+    public ResponseEntity<?> update(@Valid @RequestBody Class c, @Param("id") Integer id){
         try{
             classService.update(c,id);
             return ResponseEntity.ok("Update class success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("delete")
@@ -44,8 +43,8 @@ public class ClassController {
         try{
             classService.delete(id);
             return ResponseEntity.ok("Delete class success!");
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("search")
@@ -56,7 +55,7 @@ public class ClassController {
             Page<Class> page = classService.search(code,pageable);
             return new ResponseEntity<>(page,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

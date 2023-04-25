@@ -19,10 +19,9 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Override
-    @Transactional
     public void add(Subject subject) {
         try{
-            if(validate(subject)){
+            if(!validate(subject)){
                 Subject sub = new Subject();
                 sub.setCode(subject.getCode());
                 sub.setName(subject.getName());
@@ -35,11 +34,10 @@ public class SubjectServiceImpl implements SubjectService {
                 subjectRepository.save(sub);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
-    @Transactional
     public Subject update(Subject subject, Integer id) {
         try {
             if(validate(subject)){
@@ -53,12 +51,11 @@ public class SubjectServiceImpl implements SubjectService {
                 subjectRepository.save(sub);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+           throw new RuntimeException(e);
         }
-        return null;
+        return subject;
     }
     @Override
-    @Transactional
     public void delete(List<Integer> id) {
         try {
             Boolean kt = subjectRepository.existsByIdIn(id);
@@ -69,11 +66,10 @@ public class SubjectServiceImpl implements SubjectService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
-    @Transactional
     public Page<Subject> search(String code, String name, Pageable pageable) {
         try {
             Page<Subject> subjectPage = subjectRepository.search(code, name, pageable);
@@ -82,38 +78,30 @@ public class SubjectServiceImpl implements SubjectService {
             }
             return subjectPage;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
     }
-    public boolean validate(Subject subject){
-        try {
-            if(subject == null){
+    public boolean validate(Subject subject) throws Exception {
+        if(subject == null){
                 throw new Exception("Không có dữ liệu!");
-            }
-            if(subject.getId() == null){
-                throw new Exception("Không tồn tại Id!");
-            }
-            if(subjectRepository.existsByCode(subject.getCode())){
+        }
+        if(subjectRepository.existsByCode(subject.getCode())){
                 throw new Exception("Mã môn học đã tồn tại!");
-            }
-            if(subject.getCode().isEmpty() || subject.getCode() == null){
+        }
+        if(subject.getCode().isEmpty() || subject.getCode() == null){
                 throw new Exception("Mã môn học không được để trống!");
-            }
-            if(subjectRepository.existsByName(subject.getName())){
+        }
+        if(subjectRepository.existsByName(subject.getName())){
                 throw new Exception("Tên môn học đã tồn tại!");
-            }
-            if(subject.getName().isEmpty() || subject.getName() == null){
+        }
+        if(subject.getName().isEmpty() || subject.getName() == null){
                 throw new Exception("Tên môn học không được để trống!");
-            }
-            if(subject.getOnly() == null){
+        }
+        if(subject.getOnly() == null){
                 throw  new Exception("Số tín chỉ không được để trống!");
-            }
-            if(subject.getQuantity() == null){
+        }
+        if(subject.getQuantity() == null){
                 throw new Exception("Số tiết không được để trống!");
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
         }
         return false;
     }

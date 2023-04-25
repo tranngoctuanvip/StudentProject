@@ -40,7 +40,7 @@ public class PointController {
             pointService.delete(id);
             return ResponseEntity.ok("Delete point success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

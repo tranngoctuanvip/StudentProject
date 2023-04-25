@@ -27,7 +27,7 @@ public class TeacherController {
             teacherService.add(teacher,classId,subId);
             return ResponseEntity.ok("Add teacher success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")
@@ -39,7 +39,7 @@ public class TeacherController {
             teacherService.update(teacher,id,classId,subId);
             return ResponseEntity.ok("Update teacher success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("delete")
@@ -48,18 +48,18 @@ public class TeacherController {
             teacherService.delete(id);
             return ResponseEntity.ok("Delete teacher success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("search")
-    public ResponseEntity<Page<Teacher>> search(@Param("code") String code, @Param("name") String name, @Param("position") String position,
+    public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name, @Param("position") String position,
                                                 @RequestParam(defaultValue = "0") int size,
                                                 @RequestParam(defaultValue = "5") int limit){
         try {
             Pageable pageable = PageRequest.of(size,limit);
             return new ResponseEntity<>(teacherService.search(code,name,position,pageable),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -29,7 +29,7 @@ public class SubjectController {
             subjectService.add(subject);
             return ResponseEntity.ok("Add subject success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")
@@ -37,10 +37,9 @@ public class SubjectController {
         try{
             subjectService.update(subject,id);
             return ResponseEntity.ok("Update subject success!");
-        } catch (RuntimeException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return null;
     }
     @PostMapping("delete")
     public ResponseEntity<?> delete(@Param("id")List<Integer> id){
@@ -48,7 +47,7 @@ public class SubjectController {
             subjectService.delete(id);
             return ResponseEntity.ok("Delete subject success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("search")
@@ -60,7 +59,7 @@ public class SubjectController {
             Page<Subject> page = subjectService.search(code,name, pageable);
             return new ResponseEntity<>(page,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

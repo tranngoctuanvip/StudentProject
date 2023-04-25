@@ -26,7 +26,7 @@ public class StudentController {
             studentService.add(student,classid);
             return ResponseEntity.ok("Add student success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")
@@ -35,7 +35,7 @@ public class StudentController {
             studentService.update(student,id,classid);
             return ResponseEntity.ok("Update student success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PostMapping("delete")
@@ -44,11 +44,11 @@ public class StudentController {
             studentService.delete(id);
             return ResponseEntity.ok("Delete student success!");
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("search")
-    public ResponseEntity<Page<Student>> search(@Param("code") String code, @Param("name") String name,
+    public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name,
                                                 @RequestParam(defaultValue = "0") Integer sex,
                                                 @RequestParam(defaultValue = "0") int size,
                                                 @RequestParam(defaultValue = "5") int limit){
@@ -56,15 +56,7 @@ public class StudentController {
             Pageable pageable = PageRequest.of(size,limit);
             return new ResponseEntity<>(studentService.searchbycodeandname(code,name,sex, pageable),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-//    @GetMapping("searchbysex")
-//    public ResponseEntity<?> searchbysex(@Param("sex") Integer sex){
-//        try {
-//            return new ResponseEntity<>(studentService.searchbysex(sex),HttpStatus.OK);
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 }

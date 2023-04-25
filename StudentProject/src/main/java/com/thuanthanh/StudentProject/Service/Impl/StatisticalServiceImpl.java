@@ -26,100 +26,107 @@ public class StatisticalServiceImpl implements StatisticalService {
     @Autowired
     private ClassRepository classRepository;
     @Override
-    @Transactional
     public List<Map<String, Object>> quantitySV() {
         try {
-            Map<String,Object> sv = studentRepository.sv();
-            if(sv.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
+            if(!validate()){
+                Map<String,Object> sv = studentRepository.sv();
+                Map<String,Object> svboy = studentRepository.svboy();
+                Map<String,Object> svgrid = studentRepository.svgrid();
+                Map<String,Object> top4under = studentRepository.top4under();
+                List<Map<String,Object>> getall = new ArrayList<>();
+                getall.add(sv);
+                getall.add(svboy);
+                getall.add(svgrid);
+                getall.add(top4under);
+                return getall;
             }
-            Map<String,Object> svboy = studentRepository.svboy();
-            if(svboy.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            Map<String,Object> svgrid = studentRepository.svgrid();
-            if(svgrid.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            Map<String,Object> top4under = studentRepository.top4under();
-            if(svgrid.isEmpty()){
-                throw new RuntimeException("Không có dữ liệu!");
-            }
-            List<Map<String,Object>> getall = new ArrayList<>();
-            getall.add(sv);
-            getall.add(svboy);
-            getall.add(svgrid);
-            getall.add(top4under);
-            return getall;
-        } catch (RuntimeException e) {
-            logger.error(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
     @Override
-    @Transactional
     public List<Map<String, Object>> top5() {
         try{
-            List<Map<String,Object>> top5SVpoint = studentRepository.top5point();
-            if(top5SVpoint.isEmpty()){
-                throw new RuntimeException("không có dữ liệu!");
+            if(!validate()){
+                List<Map<String,Object>> top5SVpoint = studentRepository.top5point();
+                return top5SVpoint;
             }
-            return top5SVpoint;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return null;
     }
     @Override
-    @Transactional
     public List<Map<String, Object>> quatity() {
         try {
-            Map<String,Object> quatityClass = classRepository.quatityClass();
-            if(quatityClass.isEmpty()){
-                throw new Exception("Không có dữ liệu");
+            if(!validate()){
+                Map<String,Object> quatityClass = classRepository.quatityClass();
+                Map<String,Object> quatityDepart = departmentRepository.quatitydepart();
+                Map<String,Object> quatityTeacher = teacherRepository.quatityteacher();
+                Map<String,Object> quatitySub = subjectRepository.quatitySub();
+                List<Map<String,Object>> quatity = new ArrayList<>();
+                quatity.add(quatityClass);
+                quatity.add(quatityDepart);
+                quatity.add(quatityTeacher);
+                quatity.add(quatitySub);
+                return quatity;
             }
-            Map<String,Object> quatityDepart = departmentRepository.quatitydepart();
-            if(quatityDepart.isEmpty()){
-                throw new Exception("Không có dữ liệu!");
-            }
-            Map<String,Object> quatityTeacher = teacherRepository.quatityteacher();
-            if(quatityTeacher.isEmpty()){
-                throw new Exception("Không có dữ liệu!");
-            }
-            Map<String,Object> quatitySub = subjectRepository.quatitySub();
-            if(quatitySub.isEmpty()){
-                throw new Exception("Không có dữ liệu!");
-            }
-            List<Map<String,Object>> quatity = new ArrayList<>();
-            quatity.add(quatityClass);
-            quatity.add(quatityDepart);
-            quatity.add(quatityTeacher);
-            quatity.add(quatitySub);
-            return quatity;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return null;
     }
     @Override
-    @Transactional
     public List<Map<String, Object>> quatityThsTS() {
         try {
-            Map<String,Object> quatityTh = teacherRepository.quatityThs();
-            if(quatityTh.isEmpty()){
-                throw new Exception("Không có dữ liệu");
+            if(!validate()){
+                Map<String,Object> quatityTh = teacherRepository.quatityThs();
+                Map<String,Object> quatityTS = teacherRepository.quatityTS();
+                List<Map<String,Object>> quatityThTS = new ArrayList<>();
+                quatityThTS.add(quatityTh);
+                quatityThTS.add(quatityTS);
+                return quatityThTS;
             }
-            Map<String,Object> quatityTS = teacherRepository.quatityTS();
-            if(quatityTS.isEmpty()){
-                throw new Exception("Không có dữ liệu");
-            }
-            List<Map<String,Object>> quatityThTS = new ArrayList<>();
-            quatityThTS.add(quatityTh);
-            quatityThTS.add(quatityTS);
-            return quatityThTS;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return null;
+    }
+    public boolean validate() throws Exception {
+        if(studentRepository.sv() == null){
+            throw new Exception("Không tìm thấy dữ liệu sinh viên!");
+        }
+        if(studentRepository.svboy() == null){
+            throw new RuntimeException("Không tìm thấy dữ liệu sinh viên nam!");
+        }
+        if(studentRepository.svgrid() == null){
+            throw new RuntimeException("Không tìm thấy dữ liệu sinh viên nữ!");
+        }
+        if(studentRepository.top4under() == null){
+            throw new RuntimeException("Không tìm thấy dữ liệu sinh viên bị điểm dưới 4!");
+        }
+        if(studentRepository.top5point() == null){
+            throw new RuntimeException("không tìm thấy top 5 sinh viên có ĐTB cao nhất!");
+        }
+        if(classRepository.quatityClass() == null){
+            throw new Exception("Không tìm thấy số lượng lớp học");
+        }
+        if(departmentRepository.quatitydepart() == null){
+            throw new Exception("Không tìm thấy số lượng phòng!");
+        }
+        if(teacherRepository.quatityteacher() == null){
+            throw new Exception("Không tìm thấy số lượng giáo viên!");
+        }
+        if(subjectRepository.quatitySub() == null){
+            throw new Exception("Không tìm thấy số lượng môn học!");
+        }
+        if(teacherRepository.quatityThs() == null){
+            throw new Exception("Không tìm thấy số lượng thạc sĩ!");
+        }
+        if(teacherRepository.quatityTS() == null){
+            throw new Exception("Không tìm thấy số lượng tiến sĩ!");
+        }
+        return false;
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface DepartmentService {
     void add(Department department);
-    Department update(Department department, Integer id);
+    void update(Department department, Integer id);
     void delete(List<Integer> id);
     List<Map<String,Object>> statis();
 }

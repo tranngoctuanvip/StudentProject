@@ -23,7 +23,6 @@ public class PointServiceImpl implements PointService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Override
-    @Transactional
     public void add(Point point, Integer subId, Integer stId) {
         try {
             Point p = new Point();
@@ -41,7 +40,6 @@ public class PointServiceImpl implements PointService {
         }
     }
     @Override
-    @Transactional
     public Point update(Point point, Integer id, Integer subId, Integer stId) {
         try {
             if(pointRepository.existsById(id)){
@@ -59,12 +57,11 @@ public class PointServiceImpl implements PointService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
         return point;
     }
     @Override
-    @Transactional
     public void delete(List<Integer> id) {
         try{
             Boolean kt = pointRepository.existsByIdIn(id);
@@ -75,7 +72,7 @@ public class PointServiceImpl implements PointService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentRepository departmentRepository;
     @Override
     public void add(Department department) {
-        try {
-            if(validate((department))){
+        try{
+            if(!validate(department)){
                 Department dp = new Department();
                 dp.setCode(department.getCode());
                 dp.setName(department.getName());
@@ -31,13 +32,13 @@ public class DepartmentServiceImpl implements DepartmentService {
                 departmentRepository.save(dp);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
-    public Department update(Department department, Integer id) {
+    public void update(Department department, Integer id) {
         try {
-            if(validate(department)){
+            if(!validate(department)){
                 Department dp = departmentRepository.findById(id).get();
                 dp.setCode(department.getCode());
                 dp.setName(department.getName());
@@ -48,9 +49,8 @@ public class DepartmentServiceImpl implements DepartmentService {
                 departmentRepository.save(dp);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
     }
     @Override
     public void delete(List<Integer> id) {
@@ -63,39 +63,32 @@ public class DepartmentServiceImpl implements DepartmentService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
     @Override
     public List<Map<String, Object>> statis() {
         return null;
     }
-    private boolean validate(Department department) {
-        try {
+    private boolean validate(Department department) throws Exception {
             if (department == null) {
                 throw new Exception("Không có dữ liệu!");
-            }
-            if(department.getId() == null){
-                throw new Exception("Không tồn tại Id!");
             }
             if (departmentRepository.existsByName(department.getName())) {
                 throw new Exception("Tên phòng đã tồn tại!");
             }
-            if(department.getName() == null){
+            if(department.getName().isEmpty() || department.getName() == null){
                 throw new Exception("Tên phòng không được để trống!");
             }
             if(departmentRepository.existsByCode(department.getCode())){
                 throw new Exception("Mã phòng đã tồn tại!");
             }
-            if(department.getCode() == null){
+            if(department.getCode().isEmpty() || department.getCode() == null){
                 throw new Exception("Mã phòng không được để trống!");
             }
-            if(department.getDescribe() == null){
+            if(department.getDescribe().isEmpty() || department.getDescribe() == null){
                 throw new Exception("Mô tả không được để trống!");
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
         return false;
     }
 }

@@ -18,7 +18,7 @@ public class StatisticController {
         try {
             return new ResponseEntity<>(statisticalService.top5(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("statistic")
@@ -26,7 +26,7 @@ public class StatisticController {
         try {
             return new ResponseEntity<>(statisticalService.quantitySV(),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("quatity")
@@ -34,7 +34,7 @@ public class StatisticController {
         try {
             return new ResponseEntity<>(statisticalService.quatity(),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("quatityThsTS")
@@ -42,7 +42,7 @@ public class StatisticController {
         try {
             return new ResponseEntity<>(statisticalService.quatityThsTS(),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
