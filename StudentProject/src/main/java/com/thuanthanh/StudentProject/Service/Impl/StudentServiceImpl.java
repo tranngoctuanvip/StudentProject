@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Stream;
+
+import static java.lang.Math.nextUp;
+import static java.lang.Math.random;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -23,13 +27,15 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private ClassRepository classRepository;
-    Utils utils = new Utils();
+    String prefix = "sv000";
     @Override
     public void add(Student student, Integer classid) {
         try{
             if(!validate(student)){
                 Student sd = new Student();
-                sd.setCode(student.getCode());
+                sd.setId(student.getId());
+                studentRepository.save(sd);
+                sd.setCode(prefix + sd.getId());
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
@@ -41,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
                 studentRepository.save(sd);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
@@ -61,7 +67,7 @@ public class StudentServiceImpl implements StudentService {
                 studentRepository.save(sd);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
     }
@@ -76,7 +82,7 @@ public class StudentServiceImpl implements StudentService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
@@ -88,19 +94,19 @@ public class StudentServiceImpl implements StudentService {
             }
             return searchbycodeandname;
         } catch (Exception e) {
-           throw new RuntimeException(e);
+           throw new RuntimeException(e.getMessage(),e);
         }
     }
     public boolean validate(Student student) throws Exception {
         if(student == null){
             throw new Exception("Không có dữ liệu!");
         }
-        if(studentRepository.existsByCode(student.getCode())){
-            throw new Exception("Mã sinh viên đã tồn tại!");
-        }
-        if(student.getCode().isEmpty() || student.getCode() == null){
-            throw new Exception("Mã sinh viên không được bỏ trống!");
-        }
+//        if(studentRepository.existsByCode(student.getCode())){
+//            throw new Exception("Mã sinh viên đã tồn tại!");
+//        }
+//        if(student.getCode().isEmpty() || student.getCode() == null){
+//            throw new Exception("Mã sinh viên không được bỏ trống!");
+//        }
         if(student.getName().isEmpty() || student.getName() == null){
             throw new Exception("Tên sinh viên không được để trống!");
         }
