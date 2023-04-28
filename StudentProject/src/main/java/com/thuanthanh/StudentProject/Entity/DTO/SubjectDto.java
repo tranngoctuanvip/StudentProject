@@ -10,7 +10,6 @@ public class SubjectDto {
     private Integer only;
     private Integer quantity;
     private String note;
-
     public SubjectDto(Subject subject){
         this.code = subject.getCode();
         this.name = subject.getName();

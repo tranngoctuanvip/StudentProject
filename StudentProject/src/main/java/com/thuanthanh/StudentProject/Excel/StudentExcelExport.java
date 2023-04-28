@@ -69,10 +69,6 @@ public class StudentExcelExport {
        for(StudentDto student : studentList){
            Row row = sheet.createRow(rowCount++);
            int columnCount = 4;
-//           for (int i=1;i<=studentList.size();i++){
-//               createCell(row,3,,style);
-//               break;
-//           }
            createCell(row, columnCount++,student.getCode(),style);
            createCell(row,columnCount++,student.getName(),style);
            createCell(row,columnCount++,student.getBirthDay(),style);

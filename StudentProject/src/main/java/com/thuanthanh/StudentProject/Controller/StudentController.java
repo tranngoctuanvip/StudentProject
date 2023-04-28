@@ -4,6 +4,7 @@ package com.thuanthanh.StudentProject.Controller;
 import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Excel.StudentExcelExport;
+import com.thuanthanh.StudentProject.PDF.StudentPDF;
 import com.thuanthanh.StudentProject.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -65,23 +66,36 @@ public class StudentController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("export")
+    @GetMapping("export/XLSX")
     public ResponseEntity<?> export(HttpServletResponse response) {
         try {
             response.setContentType("application/octet-stream");
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
             String currentDateTime = dateFormat.format(new Date());
             String headerKey = "Content-Disposition";
-            File file = new File("C:\\");
-            String absolutePath = file.getAbsolutePath();
             String headerValue = "attachment; filename=student_" + currentDateTime+ ".xlsx";
-            String filePath = absolutePath.
-                    substring(0,absolutePath.lastIndexOf(File.separator));
             response.setHeader(headerKey,headerValue);
             List<StudentDto> export = studentService.export();
             StudentExcelExport studentExcelExport = new StudentExcelExport(export);
             studentExcelExport.export(response);
             return null;
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("export/PDF")
+    public ResponseEntity<?> exportPDF(HttpServletResponse response){
+        try {
+            response.setContentType("application/pdf");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateTime = dateFormat.format(new Date());
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=student_" +currentDateTime +".pdf";
+            response.setHeader(headerKey,headerValue);
+            List<StudentDto> export = studentService.export();
+            StudentPDF studentPDF = new StudentPDF(export);
+            studentPDF.export(response);
+            return  null;
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

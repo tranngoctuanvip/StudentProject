@@ -20,7 +20,6 @@ public interface DepartmentRepository extends JpaRepository<Department,Integer> 
     Boolean existsByCode(String code);
     Boolean existsByName(String name);
     Boolean existsByIdIn(List<Integer> id);
-
     @Query(value = "select count(d.id) as 'Số lượng phòng học' from department d where d.deleted = 0 and d.status =1", nativeQuery = true)
     Map<String,Object> quatitydepart();
 }

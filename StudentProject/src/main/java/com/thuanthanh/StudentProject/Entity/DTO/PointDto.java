@@ -11,7 +11,6 @@ public class PointDto {
     private String nameSubject;
     private String codeStudent;
     private String nameStudent;
-
     public PointDto(Point point){
         this.pointComponent = point.getPointComponent();
         this.testScore = point.getTestScore();

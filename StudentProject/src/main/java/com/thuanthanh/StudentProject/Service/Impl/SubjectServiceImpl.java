@@ -47,7 +47,6 @@ public class SubjectServiceImpl implements SubjectService {
         try {
             if(validate(subject)){
                 Subject sub = subjectRepository.findById(id).get();
-//                sub.setCode(subject.getCode());
                 sub.setName(subject.getName());
                 sub.setNote(subject.getNote());
                 sub.setOnly(subject.getOnly());
@@ -71,22 +70,20 @@ public class SubjectServiceImpl implements SubjectService {
                 throw new Exception("Không tồn tại Id!");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
     public Page<Subject> search(String code, String name, Pageable pageable) {
         try {
             Page<Subject> subjectPage = subjectRepository.search(code, name, pageable);
-            if(subjectPage.isEmpty()){
-                throw new Exception("Không có dữ liệu!");
-            }
-            return subjectPage;
+            if(!subjectPage.isEmpty())
+                return subjectPage;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
+        return null;
     }
-
     @Override
     @Transactional
     public List<SubjectDto> getall() {
