@@ -43,17 +43,17 @@ public class ClassController {
         try{
             classService.delete(id);
             return ResponseEntity.ok("Delete class success!");
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("search")
-    public ResponseEntity<?> search(@Param("code") String code,@RequestParam(defaultValue = "0") int size,
-                                    @RequestParam(defaultValue = "5") int limit){
+    public ResponseEntity<?> search(@Param("code") String code,@RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "5") int size){
         try{
-            Pageable pageable = PageRequest.of(size,limit);
-            Page<Class> page = classService.search(code,pageable);
-            return new ResponseEntity<>(page,HttpStatus.OK);
+            Pageable pageable = PageRequest.of(page,size);
+            Page<Class> classPage = classService.search(code,pageable);
+            return new ResponseEntity<>(classPage,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -28,4 +28,8 @@ public interface SubjectRepository extends JpaRepository<Subject,Integer> {
     boolean existsByCode(String code);
     boolean existsByName(String name);
     Boolean existsByIdIn(List<Integer> id);
+//    @Query("select s.code , s.name , s.only ,s.quantity, s.note from Subject s where s.status = 1 and s.deleted  = 0")
+//    List<Subject> getall();
+
+    List<Subject> findAllByStatusAndDeleted(Integer status, Integer deleted);
 }

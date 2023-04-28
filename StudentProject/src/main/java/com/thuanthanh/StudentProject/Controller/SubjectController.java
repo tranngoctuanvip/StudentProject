@@ -62,4 +62,12 @@ public class SubjectController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("getall")
+    public ResponseEntity<?> getall(){
+        try {
+            return new ResponseEntity<>(subjectService.getall(),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

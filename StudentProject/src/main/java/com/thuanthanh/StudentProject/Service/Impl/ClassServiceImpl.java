@@ -20,12 +20,15 @@ public class ClassServiceImpl implements ClassService {
     public static final Logger logger = LoggerFactory.getLogger(ClassServiceImpl.class);
     @Autowired
     private ClassRepository classRepository;
+    private String prefix = "LH00";
     @Override
     public Class add(Class c) {
         try {
             if(!validate(c)){
                 Class ca = new Class();
-                ca.setCode(c.getCode());
+                ca.setId(c.getId());
+                classRepository.save(ca);
+                ca.setCode(prefix+ca.getId());
                 ca.setName(c.getName());
                 ca.setQuantity(c.getQuantity());
                 ca.setNote(c.getNote());
@@ -36,7 +39,7 @@ public class ClassServiceImpl implements ClassService {
               return classRepository.save(ca);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
     }
@@ -45,7 +48,6 @@ public class ClassServiceImpl implements ClassService {
         try {
             if(!validate(c)){
                 Class ca = classRepository.findById(id).get();
-                ca.setCode(c.getCode());
                 ca.setName(c.getName());
                 ca.setQuantity(c.getQuantity());
                 ca.setNote(c.getNote());
@@ -56,7 +58,7 @@ public class ClassServiceImpl implements ClassService {
                 return classRepository.save(ca);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
     }
@@ -71,27 +73,26 @@ public class ClassServiceImpl implements ClassService {
                 throw new RuntimeException("Id Không tồn tại!");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
     public Page<Class> search(String code, Pageable pageable) {
         try {
-            return classRepository.search(code, pageable);
+            Page<Class> page = classRepository.search(code, pageable);
+            if(page == null){
+                throw new RuntimeException("Không có dữ liệu!");
+            }
+            else {
+                return page;
+            }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e.getMessage(),e);
         }
-        return null;
     }
     public boolean validate(Class c) throws Exception {
             if(c == null){
                 throw new Exception("Không có dữ liệu!");
-            }
-            if(classRepository.existsByCode(c.getCode())){
-                throw new Exception("Mã lớp đã tồn tại!");
-            }
-            if(c.getCode().isEmpty() || c.getCode() == null){
-                throw new Exception("Tên mã lớp không được để trống!");
             }
             if(c.getName().isEmpty() || c.getName() == null){
                 throw new Exception("Tên lớp không được để trống!");

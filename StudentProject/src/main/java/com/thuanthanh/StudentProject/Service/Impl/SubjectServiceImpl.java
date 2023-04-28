@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Entity.DTO.SubjectDto;
 import com.thuanthanh.StudentProject.Entity.Subject;
 import com.thuanthanh.StudentProject.Repository.SubjectRepository;
 import com.thuanthanh.StudentProject.Service.SubjectService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -18,12 +20,15 @@ public class SubjectServiceImpl implements SubjectService {
     public static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
     @Autowired
     private SubjectRepository subjectRepository;
+    private String prefix = "MH00";
     @Override
     public void add(Subject subject) {
         try{
             if(!validate(subject)){
                 Subject sub = new Subject();
-                sub.setCode(subject.getCode());
+                sub.setId(subject.getId());
+                subjectRepository.save(sub);
+                sub.setCode(prefix+sub.getId());
                 sub.setName(subject.getName());
                 sub.setNote(subject.getNote());
                 sub.setOnly(subject.getOnly());
@@ -42,7 +47,7 @@ public class SubjectServiceImpl implements SubjectService {
         try {
             if(validate(subject)){
                 Subject sub = subjectRepository.findById(id).get();
-                sub.setCode(subject.getCode());
+//                sub.setCode(subject.getCode());
                 sub.setName(subject.getName());
                 sub.setNote(subject.getNote());
                 sub.setOnly(subject.getOnly());
@@ -81,15 +86,21 @@ public class SubjectServiceImpl implements SubjectService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    @Transactional
+    public List<SubjectDto> getall() {
+        List<Subject> subjects = subjectRepository.findAllByStatusAndDeleted(1,0);
+        List<SubjectDto> subjectDtos = new ArrayList<>();
+        for (Subject subject : subjects){
+            subjectDtos.add(new SubjectDto(subject));
+        }
+        return subjectDtos;
+    }
+
     public boolean validate(Subject subject) throws Exception {
         if(subject == null){
                 throw new Exception("Không có dữ liệu!");
-        }
-        if(subjectRepository.existsByCode(subject.getCode())){
-                throw new Exception("Mã môn học đã tồn tại!");
-        }
-        if(subject.getCode().isEmpty() || subject.getCode() == null){
-                throw new Exception("Mã môn học không được để trống!");
         }
         if(subjectRepository.existsByName(subject.getName())){
                 throw new Exception("Tên môn học đã tồn tại!");

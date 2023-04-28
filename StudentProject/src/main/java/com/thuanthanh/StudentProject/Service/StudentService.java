@@ -1,6 +1,7 @@
 package com.thuanthanh.StudentProject.Service;
 
 
+import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,4 +14,5 @@ public interface StudentService {
     Student update(Student student, Integer id, Integer classid);
     void delete(List<Integer> id);
     Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable);
+    List<StudentDto> export();
 }

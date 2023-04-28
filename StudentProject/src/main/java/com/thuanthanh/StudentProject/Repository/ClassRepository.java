@@ -31,4 +31,5 @@ public interface ClassRepository extends JpaRepository<Class,Integer> {
     @Query(value = "select count(c.id) as 'Số lượng lớp' from class c where c.status = 1 and c.deleted =0",nativeQuery = true)
     Map<String,Object> quatityClass();
     Boolean existsByIdIn(List<Integer> id);
+//     Boolean countByName();
 }

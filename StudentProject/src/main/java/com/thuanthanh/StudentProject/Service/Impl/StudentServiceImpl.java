@@ -1,24 +1,22 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
 
+import com.thuanthanh.StudentProject.Entity.Class;
+import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
 import com.thuanthanh.StudentProject.Repository.StudentRepository;
 import com.thuanthanh.StudentProject.Service.StudentService;
-import com.thuanthanh.StudentProject.StringUtil.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Stream;
-
-import static java.lang.Math.nextUp;
-import static java.lang.Math.random;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -27,15 +25,15 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private ClassRepository classRepository;
-    String prefix = "sv000";
+    private String prefix = "sv000";
     @Override
     public void add(Student student, Integer classid) {
         try{
             if(!validate(student)){
                 Student sd = new Student();
                 sd.setId(student.getId());
-                studentRepository.save(sd);
-                sd.setCode(prefix + sd.getId());
+                studentRepository.save(sd);  // luu ID để gán xuống cho code
+                sd.setCode(prefix + sd.getId()); // thêm code tự động
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
@@ -55,7 +53,6 @@ public class StudentServiceImpl implements StudentService {
         try{
             if(!validate(student)){
                 Student sd = studentRepository.findById(id).get();
-                sd.setCode(student.getCode());
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
@@ -97,16 +94,23 @@ public class StudentServiceImpl implements StudentService {
            throw new RuntimeException(e.getMessage(),e);
         }
     }
+    @Override
+    public List<StudentDto> export() {
+        try {
+           List<Student> students = studentRepository.findAllByStatusAndDeleted(1,0);
+           List<StudentDto> studentDtos = new ArrayList<>();
+           for (Student student :students){
+                studentDtos.add(new StudentDto(student));
+           }
+            return studentDtos;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
     public boolean validate(Student student) throws Exception {
         if(student == null){
             throw new Exception("Không có dữ liệu!");
         }
-//        if(studentRepository.existsByCode(student.getCode())){
-//            throw new Exception("Mã sinh viên đã tồn tại!");
-//        }
-//        if(student.getCode().isEmpty() || student.getCode() == null){
-//            throw new Exception("Mã sinh viên không được bỏ trống!");
-//        }
         if(student.getName().isEmpty() || student.getName() == null){
             throw new Exception("Tên sinh viên không được để trống!");
         }

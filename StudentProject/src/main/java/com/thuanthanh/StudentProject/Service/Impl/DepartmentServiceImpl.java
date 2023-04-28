@@ -18,12 +18,15 @@ public class DepartmentServiceImpl implements DepartmentService {
     public static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
     @Autowired
     private DepartmentRepository departmentRepository;
+    private String prefix = "PH00";
     @Override
     public void add(Department department) {
         try{
             if(!validate(department)){
                 Department dp = new Department();
-                dp.setCode(department.getCode());
+                dp.setId(department.getId());
+                departmentRepository.save(dp);
+                dp.setCode(prefix+dp.getId());
                 dp.setName(department.getName());
                 dp.setDescribe(department.getDescribe());
                 dp.setStatus(1);
@@ -40,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             if(!validate(department)){
                 Department dp = departmentRepository.findById(id).get();
-                dp.setCode(department.getCode());
+//                dp.setCode(department.getCode());
                 dp.setName(department.getName());
                 dp.setDescribe(department.getDescribe());
                 dp.setStatus(1);
@@ -80,12 +83,12 @@ public class DepartmentServiceImpl implements DepartmentService {
             if(department.getName().isEmpty() || department.getName() == null){
                 throw new Exception("Tên phòng không được để trống!");
             }
-            if(departmentRepository.existsByCode(department.getCode())){
-                throw new Exception("Mã phòng đã tồn tại!");
-            }
-            if(department.getCode().isEmpty() || department.getCode() == null){
-                throw new Exception("Mã phòng không được để trống!");
-            }
+//            if(departmentRepository.existsByCode(department.getCode())){
+//                throw new Exception("Mã phòng đã tồn tại!");
+//            }
+//            if(department.getCode().isEmpty() || department.getCode() == null){
+//                throw new Exception("Mã phòng không được để trống!");
+//            }
             if(department.getDescribe().isEmpty() || department.getDescribe() == null){
                 throw new Exception("Mô tả không được để trống!");
             }

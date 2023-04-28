@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
@@ -42,4 +41,7 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
     Page<Student> searchbycodeandname(@Param("code") String code, @Param("name") String name,@Param("sex") Integer sex, Pageable pageable);
     @Query(value = "select s.code, s.name, s.birth_day, s.address, s.sex, s.class_id from student s where s.status  =1 and s.deleted = 0 and s.sex = :sex",nativeQuery = true)
     Map<String,Object> searchbysex(@Param("sex") Integer sex);
+//    @Query("select s.code,s.name,s.sex,s.address,s.birthDay,s.aClass from Student s where s.status =1 and s.deleted = 0")
+//    List<Student> export();
+    List<Student> findAllByStatusAndDeleted(Integer status, Integer deleted);
 }

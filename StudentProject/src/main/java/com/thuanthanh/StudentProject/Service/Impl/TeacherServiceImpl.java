@@ -27,12 +27,15 @@ public class TeacherServiceImpl implements TeacherService {
     private SubjectRepository subjectRepository;
     @Autowired
     private ClassRepository classRepository;
+    private String prefix = "GV00";
     @Override
     public void add(Teacher teacher,List<Integer> classId, List<Integer> subId) {
         try {
             if(!validate(teacher,classId,subId)){
                 Teacher t = new Teacher();
-                t.setCode(teacher.getCode());
+                t.setId(teacher.getId());
+                teacherRepository.save(t);
+                t.setCode(prefix+t.getId());
                 t.setName(teacher.getName());
                 t.setAddress(teacher.getAddress());
                 t.setBirthDay(teacher.getBirthDay());
@@ -48,7 +51,7 @@ public class TeacherServiceImpl implements TeacherService {
                 teacherRepository.save(t);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
@@ -56,7 +59,7 @@ public class TeacherServiceImpl implements TeacherService {
         try {
             if(!validate(teacher,classId,subId)){
                 Teacher t = teacherRepository.findById(id).get();
-                t.setCode(teacher.getCode());
+//                t.setCode(teacher.getCode());
                 t.setName(teacher.getName());
                 t.setAddress(teacher.getAddress());
                 t.setBirthDay(teacher.getBirthDay());
@@ -72,7 +75,7 @@ public class TeacherServiceImpl implements TeacherService {
                 teacherRepository.save(t);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
     }
@@ -87,47 +90,33 @@ public class TeacherServiceImpl implements TeacherService {
                throw new Exception("Không tồn tại id!");
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     @Override
     public Page<Teacher> search(String code, String name, String position, Pageable pageable) {
         try {
            Page<Teacher> page = teacherRepository.search(code,name,position,pageable);
-           if(!page.isEmpty()){
+           if(page.isEmpty()){
                throw new Exception("Không có dữ liệu!");
            }
-           else {
-               return page;
-           }
+           return page;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
     }
     public boolean validate(Teacher teacher, List<Integer> subId, List<Integer> classId) throws Exception {
         if(teacher == null){
             throw new Exception("Không có dữ liệu!");
         }
-        if(subjectRepository.findByIdIn(subId).isEmpty()){
-            throw new Exception("Không được để trống!");
-        }
         if(classRepository.findByIdIn(classId).isEmpty()){
-            throw new Exception("Không được để trống!");
-        }
-        if(classRepository.findByIdIn(classId).isEmpty()){
-            throw new Exception("Không được để trống thông tin!");
+            throw new Exception("Lớp học đã có người dạy!");
         }
         if(subjectRepository.findByIdIn(subId).isEmpty()){
-            throw new Exception("Không được để trống thông tin!");
-        }
-        if(teacherRepository.existsByCode(teacher.getCode())){
-            throw new Exception("Mã giảng viên đã tồn tại!");
-        }
-        if(teacher.getCode().isEmpty() || teacher.getCode() == null){
-            throw new Exception("Không được để trống mã giảng viên!");
+            throw new Exception("Môn học đã có người dạy!");
         }
         if(teacher.getName().isEmpty() || teacher.getName() == null){
-            throw new RuntimeException("Không được để trống tên giảng viên!");
+            throw new Exception("Không được để trống tên giảng viên!");
         }
         if(teacher.getAddress().isEmpty() || teacher.getAddress() == null){
             throw new Exception("Không được để trống địa chỉ!");
