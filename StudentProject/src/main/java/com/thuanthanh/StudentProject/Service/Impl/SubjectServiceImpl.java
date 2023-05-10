@@ -94,7 +94,6 @@ public class SubjectServiceImpl implements SubjectService {
         }
         return subjectDtos;
     }
-
     public boolean validate(Subject subject) throws Exception {
         if(subject == null){
                 throw new Exception("Không có dữ liệu!");

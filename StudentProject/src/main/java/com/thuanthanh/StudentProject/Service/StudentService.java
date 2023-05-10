@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Map;
 
 public interface StudentService {
     void add(Student student, Integer classid);
@@ -15,4 +14,7 @@ public interface StudentService {
     void delete(List<Integer> id);
     Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable);
     List<StudentDto> export();
+    List<Student> list(String name);
+    Boolean saveAll(List<Student> students);
+    Boolean save(List<Integer> id);
 }

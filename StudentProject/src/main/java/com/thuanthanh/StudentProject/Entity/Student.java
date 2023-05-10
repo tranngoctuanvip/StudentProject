@@ -7,7 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@Entity(name = "Student")
 @Data
 @Table(name = "Student")
 public class Student {

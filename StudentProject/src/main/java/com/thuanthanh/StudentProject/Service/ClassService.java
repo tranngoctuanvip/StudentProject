@@ -12,4 +12,5 @@ public interface ClassService {
     Class update(Class c, Integer id);
     void delete(List<Integer> id);
     Page<Class> search(String code, Pageable pageable);
+    List<Class> list();
 }

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ConfigDBC>
+  <Session-factory>
+    <name>second session</name>
+    <url>hibernate.cfg.xml</url>
+  </Session-factory>
+  <Session-factory>
+    <name>default session</name>
+    <url>hibernate_report.cfg.xml</url>
+  </Session-factory>
+</ConfigDBC>

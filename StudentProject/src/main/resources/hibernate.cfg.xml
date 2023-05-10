@@ -4,18 +4,21 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/studentproject?useSSL=false</property>
-    <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-    <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.connection.password">anhtuan123</property>
-    <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="connection.url">jdbc:mysql://localhost:3306/studentproject?useSSL=false</property>
+    <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+    <property name="connection.username">root</property>
+    <property name="connection.password">anhtuan123</property>
+    <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="connection.pool_size">1</property>
+    <property name="show_sql">true</property>
+    <property name="format_sql">false</property>
 
-    <mapping class="com.thuanthanh.StudentProject.Entity.Student"></mapping>
-    <mapping class="com.thuanthanh.StudentProject.Entity.Point"></mapping>
-    <mapping class="com.thuanthanh.StudentProject.Entity.Subject"></mapping>
-    <mapping class="com.thuanthanh.StudentProject.Entity.Class"></mapping>
-    <mapping class="com.thuanthanh.StudentProject.Entity.Teacher"></mapping>
-    <mapping class="com.thuanthanh.StudentProject.Entity.Department"></mapping>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Student"/>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Point"/>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Subject"/>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Class"/>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Teacher"/>
+    <mapping class="com.thuanthanh.StudentProject.Entity.Department"/>
 
   </session-factory>
 </hibernate-configuration>

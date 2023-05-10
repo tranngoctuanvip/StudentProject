@@ -3,7 +3,6 @@ package com.thuanthanh.StudentProject.Service.Impl;
 import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
 import com.thuanthanh.StudentProject.Service.ClassService;
-import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageDescriptorFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +89,12 @@ public class ClassServiceImpl implements ClassService {
             throw new RuntimeException(e.getMessage(),e);
         }
     }
+
+    @Override
+    public List<Class> list() {
+        return classRepository.findAll();
+    }
+
     public boolean validate(Class c) throws Exception {
             if(c == null){
                 throw new Exception("Không có dữ liệu!");

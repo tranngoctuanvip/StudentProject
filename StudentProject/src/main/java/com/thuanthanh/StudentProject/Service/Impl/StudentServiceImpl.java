@@ -1,7 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
 
-import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
@@ -13,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -49,7 +46,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
     @Override
-    public Student update(Student student, Integer id,Integer classid) {
+    public Student update(Student student, Integer id, Integer classid) {
         try{
             if(!validate(student)){
                 Student sd = studentRepository.findById(id).get();
@@ -107,6 +104,32 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+    @Override
+    public List<Student> list(String name) {
+        return studentRepository.findByNameIsNotIgnoreCaseOrNameIsNotNull(name);
+    }
+
+    @Override
+    public Boolean saveAll(List<Student> students) {
+        try {
+            studentRepository.saveAll(students);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean save(List<Integer> id) {
+        try {
+            Student student = new Student();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public boolean validate(Student student) throws Exception {
         if(student == null){
             throw new Exception("Không có dữ liệu!");

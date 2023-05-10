@@ -5,6 +5,7 @@ import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Excel.StudentExcelExport;
 import com.thuanthanh.StudentProject.PDF.StudentPDF;
+import com.thuanthanh.StudentProject.Repository.studentServices;
 import com.thuanthanh.StudentProject.Service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,8 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private studentServices studentServices;
     @PostMapping("add")
     public ResponseEntity<?> add(@RequestBody Student student, @Param("classid") Integer classid){
         try{
@@ -61,9 +64,17 @@ public class StudentController {
                                                 @RequestParam(defaultValue = "5") int limit){
         try {
             Pageable pageable = PageRequest.of(size,limit);
-            return new ResponseEntity<>(studentService.searchbycodeandname(code,name,sex, pageable),HttpStatus.OK);
+            return new ResponseEntity<>(studentService.searchbycodeandname(code,name,sex,pageable),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @PostMapping("saveAll")
+    public ResponseEntity<Boolean> saveAll(@RequestBody List<Student> students){
+        try {
+            return new ResponseEntity<>(studentService.saveAll(students),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("export/XLSX")
@@ -95,9 +106,21 @@ public class StudentController {
             List<StudentDto> export = studentService.export();
             StudentPDF studentPDF = new StudentPDF(export);
             studentPDF.export(response);
-            return  null;
+            return null;
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    @GetMapping("list")
+    public ResponseEntity<?> list(){
+        try {
+            return new ResponseEntity<>(studentServices.liststudent(),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("list2")
+    public ResponseEntity<?> list2(@Param("name") String name){
+        return new ResponseEntity<>(studentService.list(name),HttpStatus.OK);
     }
 }

@@ -1,8 +1,10 @@
 package com.thuanthanh.StudentProject.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,6 +39,10 @@ public class Teacher {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date creatTime;
+
+    @Transient
+    @JsonIgnore
+    private MultipartFile image;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")

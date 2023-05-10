@@ -58,4 +58,12 @@ public class ClassController {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("list")
+    public ResponseEntity<?> list(){
+        try {
+            return new ResponseEntity<>(classService.list(),HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

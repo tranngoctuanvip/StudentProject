@@ -13,10 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -27,15 +32,27 @@ public class TeacherServiceImpl implements TeacherService {
     private SubjectRepository subjectRepository;
     @Autowired
     private ClassRepository classRepository;
+    private static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
     private String prefix = "GV00";
     @Override
-    public void add(Teacher teacher,List<Integer> classId, List<Integer> subId) {
+    public void add(Teacher teacher, List<Integer> classId, List<Integer> subId) {
         try {
             if(!validate(teacher,classId,subId)){
                 Teacher t = new Teacher();
+                Path staticPath = Paths.get("static");
+                Path imagePath = Paths.get("images");
+                if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
+                    Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
+                }
                 t.setId(teacher.getId());
                 teacherRepository.save(t);
                 t.setCode(prefix+t.getId());
+                Path file = CURRENT_FOLDER.resolve(staticPath)
+                        .resolve(imagePath).resolve((Path) t.getImage());
+                try (OutputStream os = Files.newOutputStream(file)) {
+                    os.write(t.getImage().getBytes());
+                }
+                t.setImage((MultipartFile) imagePath.resolve((Path) t.getImage()));
                 t.setName(teacher.getName());
                 t.setAddress(teacher.getAddress());
                 t.setBirthDay(teacher.getBirthDay());
@@ -59,7 +76,6 @@ public class TeacherServiceImpl implements TeacherService {
         try {
             if(!validate(teacher,classId,subId)){
                 Teacher t = teacherRepository.findById(id).get();
-//                t.setCode(teacher.getCode());
                 t.setName(teacher.getName());
                 t.setAddress(teacher.getAddress());
                 t.setBirthDay(teacher.getBirthDay());

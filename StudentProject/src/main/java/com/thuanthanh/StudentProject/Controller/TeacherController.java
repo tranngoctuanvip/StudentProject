@@ -19,11 +19,12 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
     @PostMapping("add")
-    public ResponseEntity<?> add(@RequestBody Teacher teacher,
+    public ResponseEntity<?> add(
+                                 @RequestBody Teacher teacher,
                                  @RequestParam List<Integer> classId,
                                  @RequestParam List<Integer> subId){
         try{
-            teacherService.add(teacher,classId,subId);
+            teacherService.add(teacher, classId, subId);
             return ResponseEntity.ok("Add teacher success!");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);

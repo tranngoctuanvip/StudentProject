@@ -17,6 +17,11 @@ import java.util.Map;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Integer> {
+//    long countDistinctByNameIgnoreCaseAndAClass_NameIgnoreCaseAllIgnoreCase(String name, String name1);
+    @Modifying
+    @Query("update Student s set s.code = :code1, s.name = :name2 " +
+            "where upper(s.code) = upper(:code3) and upper(s.name) = upper(:name4)")
+    int updateCodeAndNameByCodeAndNameAllIgnoreCase(@Param("code") String code, @Param("name") String name, @Param("code") String code1, @Param("name") String name1);
     Boolean existsByCode(String code);
     Boolean existsByIdIn(List<Integer> id);
     @Query(value = "select * from student c where c.deleted = 0 and c.status = 1 and c.id = :id",nativeQuery = true)
@@ -44,4 +49,6 @@ public interface StudentRepository extends JpaRepository<Student,Integer> {
 //    @Query("select s.code,s.name,s.sex,s.address,s.birthDay,s.aClass from Student s where s.status =1 and s.deleted = 0")
 //    List<Student> export();
     List<Student> findAllByStatusAndDeleted(Integer status, Integer deleted);
+
+    List<Student> findByNameIsNotIgnoreCaseOrNameIsNotNull(String name);
 }

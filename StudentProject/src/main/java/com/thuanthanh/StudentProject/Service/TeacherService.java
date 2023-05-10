@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface TeacherService {
-    void add(Teacher teacher, List<Integer> classId,List<Integer> subId);
+    void add(Teacher teacher, List<Integer> classId, List<Integer> subId);
     Teacher update(Teacher teacher, Integer id, List<Integer> classId, List<Integer> subId);
     void delete(List<Integer> id);
     Page<Teacher> search(String code, String name, String position, Pageable pageable);
