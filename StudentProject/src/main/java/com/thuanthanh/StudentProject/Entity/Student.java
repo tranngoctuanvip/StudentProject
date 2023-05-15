@@ -42,4 +42,25 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "classId")
     private Class aClass;
+
+    @Column(name = "image", length = 1000)
+    private String image;
+
+    @Column(name = "email", length = 100)
+    private String email;
+
+    @Column(name = "phone",length = 50)
+    private String phone;
+
+    @Column(name = "otp")
+    private String otp;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "one_time_password")
+    private String oneTimePassword;
+
+    @Column(name = "otp_requested_time")
+    private Date otpRequestedTime;
 }

@@ -12,12 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Service
 public class StudentServiceImpl implements StudentService {
     public static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
+    public static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -128,6 +134,36 @@ public class StudentServiceImpl implements StudentService {
             throw new RuntimeException(e);
         }
         return null;
+    }
+
+    @Override
+    public Student upload(String name, String address, String birthday, MultipartFile image) {
+        try {
+            Path staticPath = Paths.get("static");
+            Path imagePath = Paths.get("images");
+            if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
+                Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
+            }
+            Path file = CURRENT_FOLDER.resolve(staticPath)
+                    .resolve(imagePath).resolve(Objects.requireNonNull(image.getOriginalFilename()));
+            try (OutputStream os = Files.newOutputStream(file)) {
+                os.write(image.getBytes());
+            }
+            String req = "http://localhost:8088/" + imagePath.resolve(image.getOriginalFilename());
+            Student st = new Student();
+            studentRepository.save(st);
+            st.setName(name);
+            st.setCode(prefix+st.getId());
+            st.setAddress(address);
+            st.setBirthDay(birthday);
+            st.setCreatTime(new Date());
+            st.setStatus(1);
+            st.setDeleted(0);
+            st.setImage(req.replace('\\','/'));
+            return studentRepository.save(st);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage(),e);
+        }
     }
 
     public boolean validate(Student student) throws Exception {

@@ -15,9 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -122,5 +123,13 @@ public class StudentController {
     @GetMapping("list2")
     public ResponseEntity<?> list2(@Param("name") String name){
         return new ResponseEntity<>(studentService.list(name),HttpStatus.OK);
+    }
+    @PostMapping("uploadfile")
+    public ResponseEntity<Student> upload(@RequestParam String name,@RequestParam String address,@RequestParam String birthday, @RequestParam MultipartFile image) {
+        try {
+            return new ResponseEntity<>(studentService.upload(name,address,birthday,image),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

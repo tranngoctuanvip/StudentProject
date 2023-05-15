@@ -5,6 +5,7 @@ import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface StudentService {
     List<Student> list(String name);
     Boolean saveAll(List<Student> students);
     Boolean save(List<Integer> id);
+    Student upload(String name, String address, String birthday, MultipartFile image);
+
 }
