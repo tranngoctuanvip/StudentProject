@@ -25,7 +25,9 @@ public class StudentPDF {
         font.setColor(Color.WHITE);
         cell.setPhrase(new Phrase("code",font));
         pTable.addCell(cell);
-        cell.setPhrase(new Phrase("Mã sinh viên",font));
+        cell.setPhrase(new Phrase("Tên sinh viên",font));
+        pTable.addCell(cell);
+        cell.setPhrase(new Phrase("Image",font));
         pTable.addCell(cell);
         cell.setPhrase(new Phrase("Năm sinh",font));
         pTable.addCell(cell);
@@ -40,6 +42,7 @@ public class StudentPDF {
         for (StudentDto studentDto : studentDtos){
             pTable.addCell(studentDto.getCode());
             pTable.addCell(studentDto.getName());
+            pTable.addCell(studentDto.getImage());
             pTable.addCell(studentDto.getBirthDay());
             switch (studentDto.getSex()){
                 case 0:

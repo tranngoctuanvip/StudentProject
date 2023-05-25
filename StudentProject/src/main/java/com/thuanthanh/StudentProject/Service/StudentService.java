@@ -13,11 +13,12 @@ public interface StudentService {
     void add(Student student, Integer classid);
     Student update(Student student, Integer id, Integer classid);
     void delete(List<Integer> id);
-    Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable);
+    Page<Student> searchByCodeAndName(String code, String name, Integer sex, Pageable pageable);
     List<StudentDto> export();
     List<Student> list(String name);
     Boolean saveAll(List<Student> students);
     Boolean save(List<Integer> id);
-    Student upload(String name, String address, String birthday, MultipartFile image);
+    Student upload(String name, String address, String birthday,Integer sex,Integer clazz, MultipartFile image);
+    void deleteMany(List<Integer> id);
 
 }

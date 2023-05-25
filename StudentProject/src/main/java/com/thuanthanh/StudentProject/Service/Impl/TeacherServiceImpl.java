@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Entity.Subject;
 import com.thuanthanh.StudentProject.Entity.Teacher;
@@ -58,9 +59,9 @@ public class TeacherServiceImpl implements TeacherService {
                 t.setBirthDay(teacher.getBirthDay());
                 t.setPosition(teacher.getPosition());
                 t.setSchoolToAttend(teacher.getSchoolToAttend());
-                t.setStatus(1);
+                t.setStatus(Constant.ACTIVE_STATUS);
+                t.setDeleted(Constant.INACTIVE_STATUS);
                 t.setCreatTime(new Date());
-                t.setDeleted(0);
                 List<Subject> sub = subjectRepository.findByIdIn(subId);
                 t.setSubject(sub);
                 List<Class> cls = classRepository.findByIdIn(classId);
@@ -81,9 +82,7 @@ public class TeacherServiceImpl implements TeacherService {
                 t.setBirthDay(teacher.getBirthDay());
                 t.setPosition(teacher.getPosition());
                 t.setSchoolToAttend(teacher.getSchoolToAttend());
-                t.setStatus(1);
                 t.setUpdateTime(new Date());
-                t.setDeleted(0);
                 List<Subject> sub = subjectRepository.findByIdIn(subId);
                 t.setSubject(sub);
                 List<Class> cls = classRepository.findByIdIn(classId);

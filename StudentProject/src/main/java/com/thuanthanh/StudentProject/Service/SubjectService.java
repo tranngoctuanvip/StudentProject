@@ -12,5 +12,5 @@ public interface SubjectService {
     Subject update(Subject subject, Integer id);
     void delete(List<Integer> id);
     Page<Subject> search(String code, String name, Pageable pageable);
-    List<SubjectDto> getall();
+    List<SubjectDto> getAll();
 }

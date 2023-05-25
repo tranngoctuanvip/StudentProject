@@ -1,9 +1,12 @@
 package com.thuanthanh.StudentProject.Entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -26,52 +29,12 @@ public class Customer {
     private String email;
     @Column(name = "password")
     private String password;
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getOneTimePassword() {
-        return oneTimePassword;
-    }
-
-    public void setOneTimePassword(String oneTimePassword) {
-        this.oneTimePassword = oneTimePassword;
-    }
-
-    public Date getOtpRequestedTime() {
-        return otpRequestedTime;
-    }
-
-    public void setOtpRequestedTime(Date otpRequestedTime) {
-        this.otpRequestedTime = otpRequestedTime;
-    }
-
-    public boolean isOTPRequired() {
-        if (this.getOneTimePassword() == null) {
-            return false;
-        }
-
-        long currentTimeInMillis = System.currentTimeMillis();
-        long otpRequestedTimeInMillis = this.otpRequestedTime.getTime();
-
-        if (otpRequestedTimeInMillis + OTP_VALID_DURATION < currentTimeInMillis) {
-            // OTP expires
-            return false;
-        }
-
-        return true;
-    }
-    // other fields, getters and setters are not shown
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinTable(name = "customer_role",joinColumns = @JoinColumn(name = "customer_id")
+            ,inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Role> roleSet;
 }

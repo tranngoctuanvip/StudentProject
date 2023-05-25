@@ -53,7 +53,7 @@ public class StatisticalServiceImpl implements StatisticalService {
                 return top5SVpoint;
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(),e);
         }
         return null;
     }

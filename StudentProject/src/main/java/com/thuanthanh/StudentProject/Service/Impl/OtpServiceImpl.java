@@ -26,6 +26,7 @@ public class OtpServiceImpl implements OtpService {
     @Autowired
     CustomerRepository customerRepository;
     private final JavaMailSender mailSender;
+//    private final SendMailAuto sendMailAuto;
     private static final int EXPIRED_LENGTH = 6;
     @Override
     public void generateOneTimePassword(String email) throws MessagingException, UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -33,7 +34,7 @@ public class OtpServiceImpl implements OtpService {
         SecureRandom secureRandom = new SecureRandom();
         Optional<Customer> optionalCustomer = customerRepository.findByEmail(email);
         Customer customer = optionalCustomer.get();
-        if(!optionalCustomer.isEmpty())
+        if(optionalCustomer.isPresent())
         {
 //            String OTP = RandomString.make(10);
             for (int i = 0; i<EXPIRED_LENGTH;i++){
@@ -43,6 +44,7 @@ public class OtpServiceImpl implements OtpService {
             customer.setOtpRequestedTime(new Date());
             customerRepository.save(customer);
             sendOTPEmail(customer, OTP.toString());
+//            sendMailAuto.generateOneTimePassword();
         }
         else {
             throw new MessagingException("email không tồn tại!");
@@ -63,7 +65,6 @@ public class OtpServiceImpl implements OtpService {
                 + "<p><b> Click here: "+"http://localhost:8088/mail/changepassword?email=" + customer.getEmail() +"&pass="+ customer.getPassword() +"</b></p>"
                 + "<br>"
                 + "<p>Note: this OTP is set to expire in 5 minutes.</p>";
-
         helper.setSubject(subject);
         helper.setText(content, true);
         mailSender.send(message);
@@ -79,7 +80,7 @@ public class OtpServiceImpl implements OtpService {
     public void changePassword(String email, String pass, Customer customer) throws MessagingException {
         Customer c = customerRepository.findByEmail(email).get();
             c.setOneTimePassword(customer.getOneTimePassword());
-            if(customer.getOneTimePassword().equals(c.getOneTimePassword())){
+            if(!(c.getOneTimePassword().equals(customer.getOneTimePassword()))){
                 throw new MessagingException("Mã OTP chưa chính xác!");
             }
             if(pass.equals(c.getPassword())){

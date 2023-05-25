@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.DTO.SubjectDto;
 import com.thuanthanh.StudentProject.Entity.Subject;
 import com.thuanthanh.StudentProject.Repository.SubjectRepository;
@@ -12,9 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class SubjectServiceImpl implements SubjectService {
     public static final Logger logger = LoggerFactory.getLogger(SubjectServiceImpl.class);
@@ -33,8 +33,8 @@ public class SubjectServiceImpl implements SubjectService {
                 sub.setNote(subject.getNote());
                 sub.setOnly(subject.getOnly());
                 sub.setQuantity(subject.getQuantity());
-                sub.setStatus(1);
-                sub.setDeleted(0);
+                sub.setStatus(Constant.ACTIVE_STATUS);
+                sub.setDeleted(Constant.INACTIVE_STATUS);
                 sub.setCreatTime(new Date());
                 subjectRepository.save(sub);
             }
@@ -86,8 +86,8 @@ public class SubjectServiceImpl implements SubjectService {
     }
     @Override
     @Transactional
-    public List<SubjectDto> getall() {
-        List<Subject> subjects = subjectRepository.findAllByStatusAndDeleted(1,0);
+    public List<SubjectDto> getAll() {
+        List<Subject> subjects = subjectRepository.findAllByStatusAndDeleted(Constant.ACTIVE_STATUS,Constant.INACTIVE_STATUS);
         List<SubjectDto> subjectDtos = new ArrayList<>();
         for (Subject subject : subjects){
             subjectDtos.add(new SubjectDto(subject));

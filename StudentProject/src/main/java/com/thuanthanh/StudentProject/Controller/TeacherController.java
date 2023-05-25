@@ -54,8 +54,8 @@ public class TeacherController {
     @GetMapping("search")
     public ResponseEntity<?> search(@Param("code") String code, @Param("name") String name,
                                                 @Param("position") String position,
-                                                @RequestParam(defaultValue = "0") int size,
-                                                @RequestParam(defaultValue = "5") int limit){
+                                                @RequestParam("size") int size,
+                                                @RequestParam("limit") int limit){
         try {
             Pageable pageable = PageRequest.of(size,limit);
             return new ResponseEntity<>(teacherService.search(code,name,position,pageable),HttpStatus.OK);

@@ -2,6 +2,7 @@ package com.thuanthanh.StudentProject.Controller;
 
 
 import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
+import com.thuanthanh.StudentProject.Entity.Message;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Excel.StudentExcelExport;
 import com.thuanthanh.StudentProject.PDF.StudentPDF;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,7 +65,7 @@ public class StudentController {
                                                 @RequestParam(defaultValue = "5") int limit){
         try {
             Pageable pageable = PageRequest.of(size,limit);
-            return new ResponseEntity<>(studentService.searchbycodeandname(code,name,sex,pageable),HttpStatus.OK);
+            return new ResponseEntity<>(studentService.searchByCodeAndName(code,name,sex,pageable),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -125,11 +125,25 @@ public class StudentController {
         return new ResponseEntity<>(studentService.list(name),HttpStatus.OK);
     }
     @PostMapping("uploadfile")
-    public ResponseEntity<Student> upload(@RequestParam String name,@RequestParam String address,@RequestParam String birthday, @RequestParam MultipartFile image) {
+    public ResponseEntity<?> upload(@RequestParam String name,@RequestParam String address,
+                                          @RequestParam String birthday,
+                                          @RequestParam Integer sex,
+                                          @RequestParam Integer clazz,
+                                          @RequestParam MultipartFile image) {
         try {
-            return new ResponseEntity<>(studentService.upload(name,address,birthday,image),HttpStatus.OK);
+
+            return new ResponseEntity<>(studentService.upload(name,address,birthday,sex,clazz,image),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @DeleteMapping("deleteMany")
+    public ResponseEntity<?> deleteMany(@RequestParam List<Integer> id){
+        try{
+            studentService.deleteMany(id);
+            return new ResponseEntity<>(new Message("Đã xóa thành công!"),HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message(e.getMessage()));
         }
     }
 }

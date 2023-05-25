@@ -3,12 +3,16 @@ package com.thuanthanh.StudentProject.Entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.validator.internal.util.privilegedactions.SetAccessibility;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -58,4 +62,5 @@ public class Teacher {
     @OneToMany
     @JoinColumn(name = "subject_teacher")
     private  List<Subject> subject;
+
 }

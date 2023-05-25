@@ -24,7 +24,7 @@ public class ClassController {
     public ResponseEntity<?> add(@RequestBody Class c){
         try{
             classService.add(c);
-            return ResponseEntity.ok("Add class success!");
+            return ResponseEntity.ok(classService.add(c));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }

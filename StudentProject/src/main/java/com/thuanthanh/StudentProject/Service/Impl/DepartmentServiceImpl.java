@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.Department;
 import com.thuanthanh.StudentProject.Repository.DepartmentRepository;
 import com.thuanthanh.StudentProject.Service.DepartmentService;
@@ -29,8 +30,8 @@ public class DepartmentServiceImpl implements DepartmentService {
                 dp.setCode(prefix+dp.getId());
                 dp.setName(department.getName());
                 dp.setDescribe(department.getDescribe());
-                dp.setStatus(1);
-                dp.setDeleted(0);
+                dp.setStatus(Constant.ACTIVE_STATUS);
+                dp.setDeleted(Constant.INACTIVE_STATUS);
                 dp.setCreatTime(new Date());
                 departmentRepository.save(dp);
             }
@@ -45,8 +46,6 @@ public class DepartmentServiceImpl implements DepartmentService {
                 Department dp = departmentRepository.findById(id).get();
                 dp.setName(department.getName());
                 dp.setDescribe(department.getDescribe());
-                dp.setStatus(1);
-                dp.setDeleted(0);
                 dp.setUpdateTime(new Date());
                 departmentRepository.save(dp);
             }

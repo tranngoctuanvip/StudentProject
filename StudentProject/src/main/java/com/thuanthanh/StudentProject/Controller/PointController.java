@@ -4,6 +4,8 @@ import com.thuanthanh.StudentProject.Entity.DTO.PointDto;
 import com.thuanthanh.StudentProject.Excel.PointExcelExport;
 import com.thuanthanh.StudentProject.Entity.Point;
 import com.thuanthanh.StudentProject.Service.PointService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -20,15 +22,16 @@ import java.util.List;
 @Controller
 @RequestMapping("point")
 public class PointController {
+    private static final Logger logger = LoggerFactory.getLogger(PointController.class);
     @Autowired
     private PointService pointService;
     @PostMapping("add")
-    public ResponseEntity<?> add(@RequestBody Point point, @Param("subId") Integer subId,@Param("stId") Integer stId){
+    public ResponseEntity<Point> add(@RequestBody Point point, @Param("subId") Integer subId,@Param("stId") Integer stId){
         try{
-            pointService.add(point,subId,stId);
-            return ResponseEntity.ok("Add point success!");
+            return new ResponseEntity<>(pointService.add(point,subId,stId),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.error(e.getMessage(),e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @PutMapping("update")

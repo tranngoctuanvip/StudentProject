@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.DTO.PointDto;
 import com.thuanthanh.StudentProject.Entity.Point;
 import com.thuanthanh.StudentProject.Repository.PointRepository;
@@ -24,7 +25,7 @@ public class PointServiceImpl implements PointService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Override
-    public void add(Point point, Integer subId, Integer stId) {
+    public Point add(Point point, Integer subId, Integer stId) {
         try {
             Point p = new Point();
             p.setStudent(studentRepository.getall(stId));
@@ -32,10 +33,10 @@ public class PointServiceImpl implements PointService {
             p.setPointComponent(point.getPointComponent());
             p.setTestScore(point.getTestScore());
             p.setMediumScore((point.getPointComponent()*3 + point.getTestScore()*7)/10);
-            p.setDeleted(0);
-            p.setStatus(1);
+            p.setDeleted(Constant.INACTIVE_STATUS);
+            p.setStatus(Constant.ACTIVE_STATUS);
             p.setCreatTime(new Date());
-            pointRepository.save(p);
+            return pointRepository.save(p);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(),e);
         }
@@ -52,8 +53,7 @@ public class PointServiceImpl implements PointService {
                 p.setPointComponent(point.getPointComponent());
                 p.setTestScore(point.getTestScore());
                 p.setMediumScore((point.getPointComponent()*3 + point.getTestScore()*7)/10);
-                p.setDeleted(0);
-                p.setStatus(1);p.setUpdateTime(new Date());
+                p.setUpdateTime(new Date());
                 pointRepository.save(p);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage(),e);

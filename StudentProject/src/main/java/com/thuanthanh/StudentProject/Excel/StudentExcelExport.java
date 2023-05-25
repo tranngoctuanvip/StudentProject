@@ -37,14 +37,15 @@ public class StudentExcelExport {
         cellstyle.setVerticalAlignment(VerticalAlignment.CENTER);
         cell.setCellStyle(cellstyle);
         // merge cell
-        sheet.addMergedRegion(new CellRangeAddress(2,2,4,9));
+        sheet.addMergedRegion(new CellRangeAddress(2,2,4,10));
         createCell(row,3,"STT",cellstyle);
         createCell(row,4,"code",cellstyle);
         createCell(row,5,"name",cellstyle);
-        createCell(row,6,"birthday",cellstyle);
-        createCell(row,7,"sex",cellstyle);
-        createCell(row,8,"address",cellstyle);
-        createCell(row,9,"class",cellstyle);
+        createCell(row,6,"image",cellstyle);
+        createCell(row,7,"birthday",cellstyle);
+        createCell(row,8,"sex",cellstyle);
+        createCell(row,9,"address",cellstyle);
+        createCell(row,10,"class",cellstyle);
     }
     private void createCell(Row row,int columnCount, Object value,CellStyle cellStyle){
         sheet.autoSizeColumn(columnCount);
@@ -71,6 +72,7 @@ public class StudentExcelExport {
            int columnCount = 4;
            createCell(row, columnCount++,student.getCode(),style);
            createCell(row,columnCount++,student.getName(),style);
+           createCell(row,columnCount++,student.getImage(),style);
            createCell(row,columnCount++,student.getBirthDay(),style);
            switch (student.getSex()){
                case 1:

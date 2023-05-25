@@ -1,11 +1,13 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.DTO.StudentDto;
 import com.thuanthanh.StudentProject.Entity.Student;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
 import com.thuanthanh.StudentProject.Repository.StudentRepository;
 import com.thuanthanh.StudentProject.Service.StudentService;
+import org.hibernate.validator.internal.engine.messageinterpolation.parser.MessageDescriptorFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +42,8 @@ public class StudentServiceImpl implements StudentService {
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
-                sd.setStatus(1);
-                sd.setDeleted(0);
+                sd.setStatus(Constant.INACTIVE_STATUS);
+                sd.setDeleted(Constant.ACTIVE_STATUS);
                 sd.setSex(student.getSex());
                 sd.setAClass(classRepository.findByIdAndStatusAndDeleted(classid,1,0));
                 sd.setCreatTime(new Date());
@@ -59,10 +61,10 @@ public class StudentServiceImpl implements StudentService {
                 sd.setName(student.getName());
                 sd.setAddress(student.getAddress());
                 sd.setBirthDay(student.getBirthDay());
-                sd.setStatus(1);
-                sd.setDeleted(0);
+                sd.setStatus(Constant.ACTIVE_STATUS);
+                sd.setDeleted(Constant.INACTIVE_STATUS);
                 sd.setSex(student.getSex());
-                sd.setAClass(classRepository.findByIdAndStatusAndDeleted(classid,1,0));
+                sd.setAClass(classRepository.findByIdAndStatusAndDeleted(classid,Constant.ACTIVE_STATUS,Constant.INACTIVE_STATUS));
                 sd.setUpdateTime(new Date());
                 studentRepository.save(sd);
             }
@@ -86,7 +88,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
     @Override
-    public Page<Student> searchbycodeandname(String code, String name, Integer sex, Pageable pageable) {
+    public Page<Student> searchByCodeAndName(String code, String name, Integer sex, Pageable pageable) {
         try {
             Page<Student> searchbycodeandname = studentRepository.searchbycodeandname(code,name,sex,pageable);
             if(searchbycodeandname.isEmpty()){
@@ -100,7 +102,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<StudentDto> export() {
         try {
-           List<Student> students = studentRepository.findAllByStatusAndDeleted(1,0);
+           List<Student> students = studentRepository.findAllByStatusAndDeleted(Constant.ACTIVE_STATUS,Constant.INACTIVE_STATUS);
            List<StudentDto> studentDtos = new ArrayList<>();
            for (Student student :students){
                 studentDtos.add(new StudentDto(student));
@@ -137,7 +139,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student upload(String name, String address, String birthday, MultipartFile image) {
+    public Student upload(String name, String address, String birthday, Integer sex, Integer clazz, MultipartFile image) {
         try {
             Path staticPath = Paths.get("static");
             Path imagePath = Paths.get("images");
@@ -151,14 +153,17 @@ public class StudentServiceImpl implements StudentService {
             }
             String req = "http://localhost:8088/" + imagePath.resolve(image.getOriginalFilename());
             Student st = new Student();
+            st.setId(st.getId());
             studentRepository.save(st);
             st.setName(name);
             st.setCode(prefix+st.getId());
             st.setAddress(address);
             st.setBirthDay(birthday);
+            st.setSex(sex);
+            st.setAClass(classRepository.findById(clazz).get());
             st.setCreatTime(new Date());
-            st.setStatus(1);
-            st.setDeleted(0);
+            st.setStatus(Constant.ACTIVE_STATUS);
+            st.setDeleted(Constant.INACTIVE_STATUS);
             st.setImage(req.replace('\\','/'));
             return studentRepository.save(st);
         } catch (Exception e) {
@@ -166,7 +171,20 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    public boolean validate(Student student) throws Exception {
+    @Override
+    public void deleteMany(List<Integer> id) {
+        try {
+            Boolean check = studentRepository.existsByIdIn(id);
+            if(check){
+                studentRepository.deleted(id);
+            }
+            else
+                throw new MessageDescriptorFormatException("Id không tồn tại!");
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    private boolean validate(Student student) throws Exception {
         if(student == null){
             throw new Exception("Không có dữ liệu!");
         }

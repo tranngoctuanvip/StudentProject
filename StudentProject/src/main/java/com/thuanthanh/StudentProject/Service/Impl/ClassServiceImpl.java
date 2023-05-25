@@ -1,5 +1,6 @@
 package com.thuanthanh.StudentProject.Service.Impl;
 
+import com.thuanthanh.StudentProject.Constant.Constant;
 import com.thuanthanh.StudentProject.Entity.Class;
 import com.thuanthanh.StudentProject.Repository.ClassRepository;
 import com.thuanthanh.StudentProject.Service.ClassService;
@@ -31,8 +32,8 @@ public class ClassServiceImpl implements ClassService {
                 ca.setName(c.getName());
                 ca.setQuantity(c.getQuantity());
                 ca.setNote(c.getNote());
-                ca.setStatus(1);
-                ca.setDeleted(0);
+                ca.setStatus(Constant.ACTIVE_STATUS);
+                ca.setDeleted(Constant.INACTIVE_STATUS);
                 ca.setCreatTime(new Date());
                 ca.setDepartment(c.getDepartment());
               return classRepository.save(ca);
@@ -50,8 +51,6 @@ public class ClassServiceImpl implements ClassService {
                 ca.setName(c.getName());
                 ca.setQuantity(c.getQuantity());
                 ca.setNote(c.getNote());
-                ca.setStatus(1);
-                ca.setDeleted(0);
                 ca.setUpdateTime(new Date());
                 ca.setDepartment(c.getDepartment());
                 return classRepository.save(ca);

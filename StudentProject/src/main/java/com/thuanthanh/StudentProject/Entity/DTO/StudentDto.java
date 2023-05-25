@@ -11,6 +11,7 @@ public class StudentDto {
     private Integer sex;
     private String address;
     private String className;
+    private String image;
     public StudentDto(Student student){
         this.code = student.getCode();
         this.name = student.getName();
@@ -18,5 +19,6 @@ public class StudentDto {
         this.sex = student.getSex();
         this.address = student.getAddress();
         this.className = student.getAClass().getName();
+        this.image = student.getImage();
     }
 }
